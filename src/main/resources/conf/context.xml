@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.2.xsd
+            http://www.springframework.org/schema/util
+            http://www.springframework.org/schema/util/spring-util-3.2.xsd
+            http://mybatis.org/schema/mybatis-spring
+            http://mybatis.org/schema/mybatis-spring-1.2.xsd">
+
+    <util:properties id="dbConfig" location="classpath:conf/db.properties" />
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="#{dbConfig.driverClassName}" />
+        <property name="url" value="#{dbConfig.url}" />
+        <property name="username" value="#{dbConfig.username}" />
+        <property name="password" value="#{dbConfig.password}" />
+    </bean>
+
+    <bean id="pageinationInterceptor" class="com.fcloud.core.mybatis.interceptor.PreparePaginationInterceptor">
+        <property name="dialectClass" value="#{dbConfig.dialectClassName}" />
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sqlSessionFactoryBuilder">
+            <bean class="com.fcloud.core.mybatis.proxy.PaginationSqlSessionFactoryBuilder" />
+        </property>
+        <property name="plugins">
+            <array>
+                <bean class="com.fcloud.core.mybatis.interceptor.PreparePaginationInterceptor" init-method="initDialect">
+                    <property name="dialectClass" value="#{dbConfig.dialectClassName}" />
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <mybatis-spring:scan base-package="com.fcloud" factory-ref="sqlSessionFactory"
+                         annotation="com.fcloud.core.mapper.Mapper" />
+</beans>
