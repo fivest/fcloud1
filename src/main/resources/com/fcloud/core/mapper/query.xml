@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.query">
+
+    <sql id="queryCriteriaSql">
+
+        <foreach collection="queryVariableValues" index="index" item="queryVariableValue">
+
+        </foreach>
+    </sql>
+
+    <sql id="executionVariableOperator">
+        <choose>
+            <when test="queryVariableValue.operator.equals('EQUALS')">=</when>
+            <when test="queryVariableValue.operator.equals('EQUALS_IGNORE_CASE')">=</when>
+            <when test="queryVariableValue.operator.equals('NOT_EQUALS')">&lt;&gt;</when>
+            <when test="queryVariableValue.operator.equals('NOT_EQUALS_IGNORE_CASE')">&lt;&gt;</when>
+            <when test="queryVariableValue.operator.equals('GREATER_THAN')">&gt;</when>
+            <when test="queryVariableValue.operator.equals('GREATER_THAN_OR_EQUAL')">&gt;=</when>
+            <when test="queryVariableValue.operator.equals('LESS_THAN')">&lt;</when>
+            <when test="queryVariableValue.operator.equals('LESS_THAN_OR_EQUAL')">&lt;=</when>
+        </choose>
+    </sql>
+
+</mapper>

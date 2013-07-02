@@ -2,16 +2,24 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:util="http://www.springframework.org/schema/util"
        xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context-3.2.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
             http://www.springframework.org/schema/util
             http://www.springframework.org/schema/util/spring-util-3.2.xsd
             http://mybatis.org/schema/mybatis-spring
             http://mybatis.org/schema/mybatis-spring-1.2.xsd">
+
+    <!-- 扫描所有可注册bean -->
+    <context:component-scan base-package="com.fcloud" />
+
+    <!-- DB相关配置 -->
 
     <util:properties id="dbConfig" location="classpath:conf/db.properties" />
 
@@ -21,10 +29,6 @@
         <property name="url" value="#{dbConfig.url}" />
         <property name="username" value="#{dbConfig.username}" />
         <property name="password" value="#{dbConfig.password}" />
-    </bean>
-
-    <bean id="pageinationInterceptor" class="com.fcloud.core.mybatis.interceptor.PreparePaginationInterceptor">
-        <property name="dialectClass" value="#{dbConfig.dialectClassName}" />
     </bean>
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -46,5 +50,25 @@
     </bean>
 
     <mybatis-spring:scan base-package="com.fcloud" factory-ref="sqlSessionFactory"
-                         annotation="com.fcloud.core.mapper.Mapper" />
+                         marker-interface="com.fcloud.core.mapper.Mapper" />
+
+    <bean id="mapperManager" class="com.fcloud.core.mapper.MapperManager" />
+
+    <!-- MVC相关配置 -->
+
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean class="com.fcloud.core.mvc.support.ModelArgumentResolver" />
+        </mvc:argument-resolvers>
+        <mvc:return-value-handlers>
+            <bean class="com.fcloud.core.mvc.support.ActionResultMethodReturnValueHandler" />
+        </mvc:return-value-handlers>
+    </mvc:annotation-driven>
+
+    <mvc:default-servlet-handler />
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
 </beans>
