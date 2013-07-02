@@ -2,6 +2,8 @@ package com.fcloud.core.mapper;
 
 import com.fcloud.core.model.Model;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ruben
@@ -18,4 +20,6 @@ public interface CrudMapper<T extends Model> extends Mapper<T> {
     public T find(String id);
 
     public void delete(String id);
+
+    public List<T> findAll();
 }

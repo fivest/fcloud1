@@ -27,6 +27,10 @@ public abstract class BaseController <T extends Model> {
         return modeType;
     }
 
+    protected<M> ActionResult<M> render(String viewName, M model) {
+        return new ActionResult<M>(rootPaths, viewName, model);
+    }
+
     protected ActionResult<T> render(String viewName, T model) {
         return new ActionResult<T>(rootPaths, viewName, model);
     }

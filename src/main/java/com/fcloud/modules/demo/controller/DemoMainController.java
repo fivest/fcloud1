@@ -10,11 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-30
- * Time: 下午10:39
- * To change this template use File | Settings | File Templates.
+ * Demo Main Controller
  */
 @Controller
 @RequestMapping("/demo/main")
@@ -26,7 +22,7 @@ public class DemoMainController extends CrudController<DemoMain> {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public ActionResult create() {
+    public ActionResult<DemoMain> create() {
         DemoMain main = new DemoMain();
         main.setName("test1");
         return render("edit", main);
