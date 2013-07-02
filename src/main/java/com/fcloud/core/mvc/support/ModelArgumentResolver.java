@@ -8,12 +8,15 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.bind.support.WebRequestDataBinder;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+
+import javax.servlet.ServletRequest;
 
 /**
  * Model参数自动装填器
@@ -31,9 +34,12 @@ public class ModelArgumentResolver implements HandlerMethodArgumentResolver {
         }
         Mapper<?> mapper = mapperManager.getMapper((Class<? extends Model>) parameter.getParameterType());
         if (mapper instanceof CrudMapper) {
-            return ((CrudMapper) mapper).find(id);
+            Model model = ((CrudMapper) mapper).find(id);
+            if (model != null) {
+                return model;
+            }
         }
-        return null;
+        return (Model) BeanUtils.instantiate(parameter.getParameterType());
     }
 
     @Override
@@ -55,6 +61,10 @@ public class ModelArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     protected void bindRequestParameters(WebDataBinder binder, NativeWebRequest request) {
-        ((WebRequestDataBinder) binder).bind(request);
+        if (binder instanceof ServletRequestDataBinder) {
+            ((ServletRequestDataBinder) binder).bind(request.getNativeRequest(ServletRequest.class));
+        } else {
+            ((WebRequestDataBinder) binder).bind(request);
+        }
     }
 }

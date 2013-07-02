@@ -20,7 +20,7 @@ public class ActionResultMethodReturnValueHandler implements HandlerMethodReturn
 
     private UrlPathHelper urlPathHelper = new UrlPathHelper();
 
-    private List<String> publicViewNames = new ArrayList<String>(Arrays.asList("create",""));
+    private List<String> publicViewNames = new ArrayList<String>(Arrays.asList("success", "error"));
 
     public void setPublicViewNames(List<String> publicViewNames) {
         this.publicViewNames.addAll(publicViewNames);
@@ -51,6 +51,9 @@ public class ActionResultMethodReturnValueHandler implements HandlerMethodReturn
         }
         if (viewName.startsWith("redirect:")) {
             return viewName;
+        }
+        if (publicViewNames.contains(viewName)) {
+            return "public/" + viewName;
         }
         String lookupPath = this.urlPathHelper.getLookupPathForRequest(
                                         webRequest.getNativeRequest(HttpServletRequest.class));
