@@ -1,5 +1,7 @@
 package com.fcloud.core.mapper;
 
+import com.fcloud.core.model.Model;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ruben
@@ -7,7 +9,7 @@ package com.fcloud.core.mapper;
  * Time: 下午8:39
  * To change this template use File | Settings | File Templates.
  */
-public interface CrudMapper<T> {
+public interface CrudMapper<T extends Model> extends Mapper<T> {
 
     public void insert(T model);
 
