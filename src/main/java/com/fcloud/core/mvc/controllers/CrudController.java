@@ -14,7 +14,7 @@ import java.util.List;
  */
 public abstract class CrudController<T extends Model> extends BaseController<T> {
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     public ActionResult<List<T>> index() {
         return render("index", mapper.findAll());
     }

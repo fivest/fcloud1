@@ -6,7 +6,7 @@
     <title>Demo Main Index</title>
 </head>
 <body>
-
+<a href="<%=request.getContextPath()%>/demo/main/create" target="_blank">新增</a>
 <c:forEach items="${model}" var="m">
     <div><a href="<%=request.getContextPath()%>/demo/main/${m.id}" target="_blank">${m.name}</a></div>
 </c:forEach>
