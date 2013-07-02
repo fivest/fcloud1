@@ -1,9 +1,11 @@
 package com.fcloud.modules.demo.controller;
 
+import com.fcloud.core.mvc.ActionResult;
 import com.fcloud.core.mvc.controllers.CrudController;
 import com.fcloud.modules.demo.model.DemoMain;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,4 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/demo/main")
 public class DemoMainController extends CrudController<DemoMain> {
+
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public ActionResult create() {
+        DemoMain main = new DemoMain();
+        main.setName("test1");
+        return render("edit", main);
+    }
 }
