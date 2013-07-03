@@ -7,7 +7,7 @@
 <body>
 编辑界面
 
-<form:form action="/demo/main/" method="POST" commandName="model">
+<form:form action="/demo/main/${model.storedId}" method="POST" commandName="model">
     <form:hidden path="id" />
     <table>
         <tr>

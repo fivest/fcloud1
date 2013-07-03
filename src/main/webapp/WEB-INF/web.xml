@@ -20,10 +20,21 @@
         </init-param>
     </filter>
 
+    <filter>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+
     <filter-mapping>
         <filter-name>encoding</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <servlet-name>mvc</servlet-name>
+    </filter-mapping>
+
 
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

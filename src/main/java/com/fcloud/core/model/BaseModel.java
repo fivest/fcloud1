@@ -3,15 +3,13 @@ package com.fcloud.core.model;
 import com.fcloud.util.IDGenerator;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-16
- * Time: 下午8:29
- * To change this template use File | Settings | File Templates.
+ * 模型基类
  */
 public class BaseModel implements Model {
 
     protected String id;
+
+    protected boolean _isStored;
 
     @Override
     public String getId() {
@@ -24,5 +22,18 @@ public class BaseModel implements Model {
     @Override
     public void setId(String id) {
         this.id = id;
+        this._isStored = true;
+    }
+
+    @Override
+    public final String getStoredId() {
+        if (this._isStored)
+            return this.id;
+        return null;
+    }
+
+    public BaseModel asStored() {
+        this._isStored = true;
+        return this;
     }
 }

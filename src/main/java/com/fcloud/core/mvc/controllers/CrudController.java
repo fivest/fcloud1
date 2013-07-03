@@ -36,6 +36,12 @@ public abstract class CrudController<T extends Model> extends BaseController<T> 
         return render("view", model);
     }
 
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+    public ActionResult<T> edit(@PathVariable("id") String id) {
+        T model = mapper.find(id);
+        return render("edit", model);
+    }
+
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     public ActionResult<T> update(T model) {
         mapper.update(model);
@@ -44,6 +50,12 @@ public abstract class CrudController<T extends Model> extends BaseController<T> 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ActionResult<T> delete(@PathVariable("id") String id) {
+        mapper.delete(id);
+        return render("success");
+    }
+
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
+    public ActionResult<T> deleteMethod(@PathVariable("id") String id) {
         mapper.delete(id);
         return render("success");
     }
