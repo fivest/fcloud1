@@ -18,11 +18,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-11
- * Time: 下午4:16
- * To change this template use File | Settings | File Templates.
+ * 分页执行拦截器
  */
 @Intercepts({
         @Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class})
@@ -58,8 +54,10 @@ public class PreparePaginationInterceptor extends BaseInterceptor {
                             getMappedStatement(statement), boundSql.getParameterObject(), boundSql);
                 }
 
-                final String paginationSql = dialect.getLimitString(sql, rowBounds.getOffset(),
-                        rowBounds.getLimit());
+                final Pagination<?> pagination = PageContext.<Object>get();
+
+                final String paginationSql = dialect.getLimitString(sql, pagination.getOffset(),
+                        pagination.getLimit());
                 FieldUtils.setFieldValue(boundSql, "sql", paginationSql);
                 FieldUtils.setFieldValue(rowBounds, "offset", RowBounds.NO_ROW_OFFSET);
                 FieldUtils.setFieldValue(rowBounds, "limit", RowBounds.NO_ROW_LIMIT);

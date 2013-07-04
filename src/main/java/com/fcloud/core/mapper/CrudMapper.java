@@ -1,15 +1,12 @@
 package com.fcloud.core.mapper;
 
 import com.fcloud.core.model.Model;
+import com.fcloud.core.page.Pagination;
 
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-16
- * Time: 下午8:39
- * To change this template use File | Settings | File Templates.
+ * CRUD操作Mappger
  */
 public interface CrudMapper<T extends Model> extends Mapper<T> {
 
@@ -22,4 +19,6 @@ public interface CrudMapper<T extends Model> extends Mapper<T> {
     public void delete(String id);
 
     public List<T> findAll();
+
+    public Pagination<T> findAllByPage(Pagination<T> page);
 }

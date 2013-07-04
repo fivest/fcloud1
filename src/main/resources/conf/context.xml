@@ -59,6 +59,7 @@
     <mvc:annotation-driven>
         <mvc:argument-resolvers>
             <bean class="com.fcloud.core.mvc.support.ModelArgumentResolver" />
+            <bean class="com.fcloud.core.mvc.support.PaginationArgumentResolver" />
         </mvc:argument-resolvers>
         <mvc:return-value-handlers>
             <bean class="com.fcloud.core.mvc.support.ActionResultMethodReturnValueHandler" />

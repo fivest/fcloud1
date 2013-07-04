@@ -2,12 +2,11 @@ package com.fcloud.core.mvc.controllers;
 
 import com.fcloud.core.model.Model;
 import com.fcloud.core.mvc.ActionResult;
+import com.fcloud.core.page.Pagination;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.List;
 
 /**
  * CRUD基础控制器
@@ -15,8 +14,8 @@ import java.util.List;
 public abstract class CrudController<T extends Model> extends BaseController<T> {
 
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
-    public ActionResult<List<T>> index() {
-        return render("index", mapper.findAll());
+    public ActionResult<Pagination<T>> index(Pagination<T> page) {
+        return render("index", mapper.findAllByPage(page));
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)

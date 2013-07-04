@@ -4,11 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-11
- * Time: 下午1:29
- * To change this template use File | Settings | File Templates.
+ * 分页类
  */
 public class Pagination<T> {
 
@@ -55,6 +51,9 @@ public class Pagination<T> {
         pageSize = (int) (total / limit);
         if (total % limit > 0) {
             pageSize ++;
+        }
+        if (page > pageSize) {
+            setPage(pageSize);
         }
     }
 

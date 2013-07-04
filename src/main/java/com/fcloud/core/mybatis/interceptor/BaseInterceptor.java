@@ -15,11 +15,7 @@ import org.springframework.util.ClassUtils;
 import java.util.Properties;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-11
- * Time: 下午3:40
- * To change this template use File | Settings | File Templates.
+ * 基础拦截器
  */
 public abstract class BaseInterceptor implements Interceptor {
 
