@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>template</short-name>
+    <uri>http://www.fcloud.com/taglib/template</uri>
+
+    <tag>
+        <description><![CDATA[模版标签]]></description>
+        <name>template</name>
+        <tag-class>com.fcloud.web.taglib.template.TemplateTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description><![CDATA[模版文件地址]]></description>
+            <name>extend</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description><![CDATA[区块标签]]></description>
+        <name>block</name>
+        <tag-class>com.fcloud.web.taglib.template.BlockTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description><![CDATA[区块名称标识，一个模版中，名称必须保持唯一]]></description>
+            <name>name</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <description><![CDATA[输出父区块内容标签]]></description>
+        <name>super</name>
+        <tag-class>com.fcloud.web.taglib.template.SuperTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+
+</taglib>
