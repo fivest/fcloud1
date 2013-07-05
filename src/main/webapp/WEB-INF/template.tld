@@ -20,6 +20,12 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <description><![CDATA[模版文件编码格式，默认是UTF-8]]></description>
+            <name>charEncoding</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
     <tag>
