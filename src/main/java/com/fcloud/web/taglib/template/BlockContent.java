@@ -26,7 +26,7 @@ public class BlockContent {
     }
 
     public boolean isIncludeSuper() {
-        return content.contains(BLOCK_KEY);
+        return content != null && content.contains(BLOCK_KEY);
     }
 
     public boolean isNew() {
@@ -43,7 +43,7 @@ public class BlockContent {
         if (superContent == null) {
             superContent = "";
         }
-        this.content = StringUtils.replace(this.content, "", superContent);
+        this.content = StringUtils.replace(this.content, BLOCK_KEY, superContent);
     }
 
     public String getContent() {

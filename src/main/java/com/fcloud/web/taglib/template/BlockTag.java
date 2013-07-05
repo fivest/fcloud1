@@ -34,6 +34,12 @@ public class BlockTag extends TemplateBaseTag {
         BlockContent block = context.getBlock(name);
         String body = getBodyContent() != null ? getBodyContent().getString() : "";
 
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("template block tag name = " + name + ", is new = " + block.isNew()
+                    + ", include super = " + block.isIncludeSuper());
+        }
+
         if (block.isNew()) {
             block.setContent(body);
         }
