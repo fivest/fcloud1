@@ -8,7 +8,17 @@
 
         <foreach item="crit" collection="criterions">
             and ${crit.name}
-            ${crit.op} #{crit.value}
+            <choose>
+                <when test="crit.op.equals('in')">
+                    in (<foreach collection="crit.value" item="val">#{val}</foreach>)
+                </when>
+                <when test="crit.op.equals('between')">
+                    between #{crit.value} and #{crit.value}
+                </when>
+                <otherwise>
+                    ${crit.op} #{crit.value}
+                </otherwise>
+            </choose>
         </foreach>
     </sql>
 
