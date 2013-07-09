@@ -36,4 +36,11 @@
         select * from demo_main
     </select>
 
+    <select id="findByCriteria" resultMap="demo">
+        select * from demo_main
+        <where>
+            <include refid="mapper.query.queryCriteriaSql" />
+        </where>
+    </select>
+
 </mapper>

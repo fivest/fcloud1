@@ -1,28 +1,25 @@
 package com.fcloud.core.mybatis.interceptor;
 
 import com.fcloud.util.DBUtils;
-import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
+import org.apache.ibatis.session.Configuration;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-11
- * Time: 下午5:03
- * To change this template use File | Settings | File Templates.
+ * 总数技术类
  */
 public class CountCalculater {
 
     public static void setParameters(PreparedStatement ps, MappedStatement mappedStatement, BoundSql boundSql, Object parameterObject) throws SQLException {
-        ParameterHandler parameterHandler = new DefaultParameterHandler(mappedStatement, parameterObject, boundSql);
-        parameterHandler.setParameters(ps);
+        new DefaultParameterHandler(mappedStatement, parameterObject, boundSql).setParameters(ps);
     }
 
 
@@ -34,8 +31,7 @@ public class CountCalculater {
         ResultSet rs = null;
         try {
             ps = connection.prepareStatement(countSql);
-            BoundSql countBS = new BoundSql(mappedStatement.getConfiguration(), countSql,
-                    boundSql.getParameterMappings(), parameterObject);
+            BoundSql countBS = new CountBoundSql(mappedStatement.getConfiguration(), countSql, boundSql);
             setParameters(ps, mappedStatement, countBS, parameterObject);
             rs = ps.executeQuery();
             int count = 0;
@@ -46,6 +42,36 @@ public class CountCalculater {
         } finally {
             DBUtils.closeQuiet(rs);
             DBUtils.closeQuiet(ps);
+        }
+    }
+
+    static class CountBoundSql extends BoundSql {
+
+        private final BoundSql boundSql;
+
+        public CountBoundSql(Configuration configuration, String sql, BoundSql boundSql) {
+            super(configuration, sql, null, null);
+            this.boundSql = boundSql;
+        }
+
+        public List<ParameterMapping> getParameterMappings() {
+            return boundSql.getParameterMappings();
+        }
+
+        public Object getParameterObject() {
+            return boundSql.getParameterObject();
+        }
+
+        public boolean hasAdditionalParameter(String name) {
+            return boundSql.hasAdditionalParameter(name);
+        }
+
+        public void setAdditionalParameter(String name, Object value) {
+            boundSql.setAdditionalParameter(name, value);
+        }
+
+        public Object getAdditionalParameter(String name) {
+            return boundSql.getAdditionalParameter(name);
         }
     }
 }

@@ -43,6 +43,11 @@
                 </bean>
             </array>
         </property>
+        <property name="mapperLocations">
+            <array>
+                <value>classpath:com/fcloud/core/mapper/query.xml</value>
+            </array>
+        </property>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

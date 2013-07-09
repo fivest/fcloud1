@@ -2,6 +2,8 @@ package com.fcloud.demo;
 
 import com.fcloud.core.page.Pagination;
 import com.fcloud.core.page.PaginationFactory;
+import com.fcloud.core.query.Criteria;
+import com.fcloud.core.query.Criterion;
 import com.fcloud.modules.demo.mapper.DemoMainMapper;
 import com.fcloud.modules.demo.model.DemoMain;
 import org.junit.Test;
@@ -17,11 +19,7 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-16
- * Time: 下午9:41
- * To change this template use File | Settings | File Templates.
+ * Demo单元测试
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:conf/context.xml")
@@ -68,5 +66,19 @@ public class DemoMainCrudTest {
 
         List<DemoMain> all = demoMainMapper.findAll();
         assertEquals(10, all.size());
+    }
+
+    @Test
+    public void testQuery() throws Exception {
+        for (int i = 0; i < 10; i ++) {
+            DemoMain main = new DemoMain();
+            main.setName("mytest1 " + i);
+            demoMainMapper.insert(main);
+        }
+
+        Pagination<DemoMain> list = demoMainMapper.findByCriteria(
+                new Criteria().add(new Criterion("name", "mytest1%", "like")));
+
+        assertEquals(10, list.getDatas().size());
     }
 }

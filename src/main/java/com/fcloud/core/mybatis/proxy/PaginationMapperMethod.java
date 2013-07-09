@@ -3,6 +3,7 @@ package com.fcloud.core.mybatis.proxy;
 import com.fcloud.core.page.PageContext;
 import com.fcloud.core.page.Pagination;
 import com.fcloud.core.page.PaginationFactory;
+import com.fcloud.core.query.Criteria;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.binding.BindingException;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -53,14 +54,17 @@ public class PaginationMapperMethod {
 
     public Object execute(SqlSession sqlSession, Object[] args) {
         final Object param = getParam(args);
-        Pagination<Object> page;
+        Pagination<?> page;
         RowBounds rowBounds;
         if (paginationIndex != null) {
-            page = (Pagination<Object>) args[paginationIndex];
+            page = (Pagination) args[paginationIndex];
             rowBounds = new RowBounds(page.getOffset(), page.getLimit());
         } else if (rowBoundsIndex != null) {
             rowBounds = (RowBounds) args[rowBoundsIndex];
             page = PaginationFactory.<Object>newOffsetLimitPage(rowBounds.getOffset(), rowBounds.getLimit());
+        } else if (param instanceof Criteria) {
+            page = ((Criteria) param).getPage();
+            rowBounds = new RowBounds(page.getOffset(), page.getLimit());
         } else {
             throw new BindingException("Invalid bound statement (not found rowBounds or pagination in paramenters)");
         }
@@ -73,7 +77,7 @@ public class PaginationMapperMethod {
         return page;
     }
 
-    private List<Object> executeForList(SqlSession sqlSession, Object param, RowBounds rowBounds) {
+    private List executeForList(SqlSession sqlSession, Object param, RowBounds rowBounds) {
         return sqlSession.selectList(commandName, param, rowBounds);
     }
 
