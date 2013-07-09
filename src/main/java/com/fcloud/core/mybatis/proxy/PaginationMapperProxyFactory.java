@@ -10,11 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-11
- * Time: 下午10:40
- * To change this template use File | Settings | File Templates.
+ * 分页执行器代理工厂
  */
 public class PaginationMapperProxyFactory<T> extends MapperProxyFactory<T> {
 

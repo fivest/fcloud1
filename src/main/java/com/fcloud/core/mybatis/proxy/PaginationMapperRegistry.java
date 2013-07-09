@@ -10,11 +10,7 @@ import org.apache.ibatis.session.Configuration;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-11
- * Time: 下午9:54
- * To change this template use File | Settings | File Templates.
+ * 分页mapper注册器
  */
 public class PaginationMapperRegistry extends MapperRegistry {
 

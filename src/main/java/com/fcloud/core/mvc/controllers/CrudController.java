@@ -55,7 +55,6 @@ public abstract class CrudController<T extends Model> extends BaseController<T> 
 
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
     public ActionResult<T> deleteMethod(@PathVariable("id") String id) {
-        mapper.delete(id);
-        return render("success");
+        return delete(id);
     }
 }

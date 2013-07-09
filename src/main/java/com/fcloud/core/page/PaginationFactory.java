@@ -1,11 +1,9 @@
 package com.fcloud.core.page;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-11
- * Time: 下午1:53
- * To change this template use File | Settings | File Templates.
+ * 分页对象构造工厂
  */
 public class PaginationFactory {
 
@@ -25,5 +23,10 @@ public class PaginationFactory {
         pagination.setLimit(limit);
         pagination.setOffset(offset);
         return pagination;
+    }
+
+    public static <T> Pagination newRequestPage(HttpServletRequest request) {
+        PaginationRequestResolver resolver = new PaginationRequestResolver(request);
+        return newLimitPage(resolver.getPageParameter(), resolver.getLimitParameter());
     }
 }

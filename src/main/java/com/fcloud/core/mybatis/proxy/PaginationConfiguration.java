@@ -5,11 +5,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-11
- * Time: 下午11:04
- * To change this template use File | Settings | File Templates.
+ * 分页支持配置
  */
 public class PaginationConfiguration extends Configuration {
 

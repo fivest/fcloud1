@@ -6,11 +6,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-17
- * Time: 下午9:50
- * To change this template use File | Settings | File Templates.
+ * 分页session工厂构建器
  */
 public class PaginationSqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
 

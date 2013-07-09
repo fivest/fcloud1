@@ -18,11 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-11
- * Time: 下午6:20
- * To change this template use File | Settings | File Templates.
+ * 分页方法执行器
  */
 public class PaginationMapperMethod {
 
