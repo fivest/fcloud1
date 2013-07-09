@@ -10,10 +10,10 @@
             and ${crit.name}
             <choose>
                 <when test="crit.op.equals('in')">
-                    in (<foreach collection="crit.value" item="val">#{val}</foreach>)
+                    in (<foreach collection="crit.value" item="val" separator=",">#{val}</foreach>)
                 </when>
                 <when test="crit.op.equals('between')">
-                    between #{crit.value} and #{crit.value}
+                    between <foreach collection="crit.value" item="val" separator="and">#{val}</foreach>
                 </when>
                 <otherwise>
                     ${crit.op} #{crit.value}
