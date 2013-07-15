@@ -3,11 +3,7 @@ package com.fcloud.util;
 import java.util.UUID;
 
 /**
- * Created with IntelliJ IDEA.
- * User: ruben
- * Date: 13-6-16
- * Time: 下午8:01
- * To change this template use File | Settings | File Templates.
+ * ID生成
  */
 public abstract class IDGenerator {
 

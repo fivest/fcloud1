@@ -31,7 +31,7 @@ public class CriteriaArgumentResolver implements HandlerMethodArgumentResolver {
             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         // 按规则搜集参数
         Criteria criteria = new Criteria();
-        Iterator<String> names = webRequest.getParameterNames ();
+        Iterator<String> names = webRequest.getParameterNames();
         for (;names.hasNext();) {
             String name = names.next();
             if (!name.contains(":")) {
