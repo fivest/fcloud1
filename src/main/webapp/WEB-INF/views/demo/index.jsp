@@ -18,6 +18,6 @@
                 <a href="<%=request.getContextPath()%>/demo/${m.id}?_method=DELETE" target="_blank">删除</a>
             </div>
         </c:forEach>
-        count: ${model.total}, page: ${model.page}, limit: ${model.limit}
+        count: ${page.total}, page: ${page.page}, limit: ${page.size}
     </template:block>
 </template:template>

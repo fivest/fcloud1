@@ -22,7 +22,7 @@
 
     <filter>
         <filter-name>HiddenHttpMethodFilter</filter-name>
-        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+        <filter-class>com.fcloud.web.MvcHiddenHttpMethodFilter</filter-class>
     </filter>
 
     <filter-mapping>
