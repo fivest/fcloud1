@@ -15,7 +15,7 @@
             <div>
                 <a href="<%=request.getContextPath()%>/demo/main/${m.id}" target="_blank">${m.name}</a>
                 <a href="<%=request.getContextPath()%>/demo/main/${m.id}/edit" target="_blank">编辑</a>
-                <a href="<%=request.getContextPath()%>/demo/main/${m.id}/delete" target="_blank">删除</a>
+                <a href="<%=request.getContextPath()%>/demo/main/${m.id}?_method=DELETE" target="_blank">删除</a>
             </div>
         </c:forEach>
         count: ${model.total}, page: ${model.page}, limit: ${model.limit}
