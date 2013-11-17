@@ -5,26 +5,28 @@
     <title>Demo Main 编辑</title>
 </head>
 <body>
-编辑界面
 
+<h1>用户注册</h1>
+
+<div style="text-align: center">
 <form:form action="/users/signup" method="POST" commandName="model">
     <form:hidden path="id" />
-    <table>
+    <table style="width: 500px;">
         <tr>
             <td>登录名:</td>
             <td><form:input path="name" /></td>
         </tr>
         <tr>
             <td>邮箱:</td>
-            <td><form:input path="name" /></td>
+            <td><form:input path="email" /></td>
         </tr>
         <tr>
             <td>密码:</td>
-            <td><form:input path="name" /></td>
+            <td><form:input path="password" /></td>
         </tr>
         <tr>
             <td>重复输入:</td>
-            <td><form:input path="name" /></td>
+            <td><input type="text" name="_password"></td>
         </tr>
         <tr>
             <td colspan="2">
@@ -33,5 +35,7 @@
         </tr>
     </table>
 </form:form>
+</div>
+
 </body>
 </html>
