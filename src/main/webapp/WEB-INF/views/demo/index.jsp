@@ -10,7 +10,7 @@
 
     <template:block name="body">
         <template:super />
-        <a href="<%=request.getContextPath()%>/demo/main/create" target="_blank">新增</a>
+        <a href="<%=request.getContextPath()%>/demo/create" target="_blank">新增</a>
         <c:forEach items="${model.datas}" var="m">
             <div>
                 <a href="<%=request.getContextPath()%>/demo/main/${m.id}" target="_blank">${m.name}</a>

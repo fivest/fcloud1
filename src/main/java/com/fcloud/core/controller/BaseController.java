@@ -1,7 +1,7 @@
 package com.fcloud.core.controller;
 
 import com.fcloud.core.model.Page;
-import com.fcloud.core.repository.CrudRepository;
+import com.fcloud.core.model.Persistable;
 import com.fcloud.core.repository.support.Repositories;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author Ruben Fu
  */
-public abstract class BaseController<T, R extends CrudRepository<T>> extends EventPublisherController {
+public abstract class BaseController extends EventPublisherController {
 
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -29,23 +29,29 @@ public abstract class BaseController<T, R extends CrudRepository<T>> extends Eve
     protected final String rootPath;
 
     public BaseController() {
-        String rp = AnnotationUtils.findAnnotation(getClass(), RequestMapping.class).value()[0];
-        rootPath = rp.substring(1);
+        RequestMapping rootMapping = AnnotationUtils.findAnnotation(getClass(), RequestMapping.class);
+        if (rootMapping != null) {
+            String rp = rootMapping.value()[0];
+            rootPath = rp.substring(1);
+        }
+        else {
+            rootPath = "";
+        }
     }
 
     protected ModelAndView render(String view) {
         return new ModelAndView(rootPath + "/" + view);
     }
 
-    protected ModelAndView render(String view, T model) {
+    protected ModelAndView render(String view, Persistable model) {
         return new ModelAndView(rootPath + "/" + view, "model", model);
     }
 
-    protected ModelAndView render(String view, List<T> list) {
+    protected ModelAndView render(String view, List<?> list) {
         return new ModelAndView(rootPath + "/" + view, "list", list);
     }
 
-    protected ModelAndView render(String view, Page<T> page) {
+    protected ModelAndView render(String view, Page<?> page) {
         return new ModelAndView(rootPath + "/" + view, "page", page);
     }
 }

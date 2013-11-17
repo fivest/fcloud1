@@ -8,7 +8,7 @@ import com.j256.ormlite.field.DatabaseField;
  */
 public class Entity implements Persistable {
 
-    @DatabaseField(id = true, columnName = "id")
+    @DatabaseField(id = true, columnName = "id", width = 36, canBeNull = false)
     protected String id;
 
     public String getId() {

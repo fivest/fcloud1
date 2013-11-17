@@ -24,6 +24,7 @@ public class DemoController extends ActionController<MyDemo, DemoRepository> {
         Page<MyDemo> models = getRepository().findAll(page);
         logger.info("1 #### demo controller !");
         System.out.println("2 #### demo controller !");
+        //throw new RuntimeException("test transaction");
         return render("index", models);
     }
 }

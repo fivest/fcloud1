@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="http://www.fcloud.com/taglib/fn" %>
 <html>
 <head>
     <title>Demo Main 编辑</title>
@@ -7,7 +8,7 @@
 <body>
 编辑界面
 
-<form:form action="/demo/main/${model.storedId}" method="POST" commandName="model">
+<form:form action="/demo${fn:idp(model)}" method="POST" commandName="model">
     <form:hidden path="id" />
     <table>
         <tr>

@@ -1,13 +1,14 @@
 package com.fcloud.core.controller;
 
+import com.fcloud.core.model.Persistable;
 import com.fcloud.core.repository.PagingAndSortingRepository;
 import org.springframework.core.GenericTypeResolver;
 
 /**
  * @author Ruben Fu
  */
-public class SingleModelController<T, R extends PagingAndSortingRepository<T>>
-        extends BaseController<T, R> {
+public class SingleModelController<T extends Persistable, R extends PagingAndSortingRepository<T>>
+        extends BaseController {
 
     protected R repository;
 

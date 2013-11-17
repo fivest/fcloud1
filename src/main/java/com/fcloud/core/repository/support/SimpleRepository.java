@@ -27,9 +27,14 @@ public class SimpleRepository<T> implements OrmliteRepository<T>, SingleModelRep
         return modelClass;
     }
 
+    @SuppressWarnings("unchecked")
     public SimpleRepository() {
         //this.modelClass = modelClass;
         this.modelClass = (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), SimpleRepository.class);
+    }
+
+    public SimpleRepository(Class<T> clz) {
+        this.modelClass = clz;
     }
 
     protected ConnectionSource connectionSource;
