@@ -13,9 +13,9 @@
         <a href="<%=request.getContextPath()%>/demo/create" target="_blank">新增</a>
         <c:forEach items="${page.content}" var="m">
             <div>
-                <a href="<%=request.getContextPath()%>/demo/main/${m.id}" target="_blank">${m.name}</a>
-                <a href="<%=request.getContextPath()%>/demo/main/${m.id}/edit" target="_blank">编辑</a>
-                <a href="<%=request.getContextPath()%>/demo/main/${m.id}?_method=DELETE" target="_blank">删除</a>
+                <a href="<%=request.getContextPath()%>/demo/${m.id}" target="_blank">${m.name}</a>
+                <a href="<%=request.getContextPath()%>/demo/${m.id}/edit" target="_blank">编辑</a>
+                <a href="<%=request.getContextPath()%>/demo/${m.id}?_method=DELETE" target="_blank">删除</a>
             </div>
         </c:forEach>
         count: ${model.total}, page: ${model.page}, limit: ${model.limit}
