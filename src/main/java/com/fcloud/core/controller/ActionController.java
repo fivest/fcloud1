@@ -36,7 +36,7 @@ public abstract class ActionController<T extends Persistable, R extends PagingAn
     @Transactional
     public ModelAndView save(@ModelAttribute T model, WebRequest request) {
         getRepository().save(model);
-        return render("success");
+        return render("/public/success");
     }
 
     @RequestMapping(value = {"/{id}"}, method = RequestMethod.GET)
@@ -57,14 +57,14 @@ public abstract class ActionController<T extends Persistable, R extends PagingAn
     @Transactional
     public ModelAndView update(@ModelAttribute T model, WebRequest request) {
         getRepository().save(model);
-        return render("success");
+        return render("/public/success");
     }
 
     @RequestMapping(value = {"/{id}"}, method = RequestMethod.DELETE)
     @Transactional
     public ModelAndView delete(@PathVariable("id") String id, WebRequest request) {
         getRepository().delete(id);
-        return render("success");
+        return render("/public/success");
     }
 
 }

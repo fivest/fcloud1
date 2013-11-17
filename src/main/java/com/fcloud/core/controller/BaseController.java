@@ -39,19 +39,26 @@ public abstract class BaseController extends EventPublisherController {
         }
     }
 
+    protected String resolveView(String view) {
+        if (view == null || view.startsWith("/") || view.startsWith("redirect:")) {
+            return view;
+        }
+        return rootPath + "/" + view;
+    }
+
     protected ModelAndView render(String view) {
-        return new ModelAndView(rootPath + "/" + view);
+        return new ModelAndView(resolveView(view));
     }
 
     protected ModelAndView render(String view, Persistable model) {
-        return new ModelAndView(rootPath + "/" + view, "model", model);
+        return new ModelAndView(resolveView(view), "model", model);
     }
 
     protected ModelAndView render(String view, List<?> list) {
-        return new ModelAndView(rootPath + "/" + view, "list", list);
+        return new ModelAndView(resolveView(view), "list", list);
     }
 
     protected ModelAndView render(String view, Page<?> page) {
-        return new ModelAndView(rootPath + "/" + view, "page", page);
+        return new ModelAndView(resolveView(view), "page", page);
     }
 }
