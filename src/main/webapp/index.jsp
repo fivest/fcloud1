@@ -78,6 +78,8 @@
 		var u_data=new Date().getTime();
 		$('#centerIframe').attr('src', url+"?"+u_data);
 		$('.demo1 a.selected').removeClass('selected');
+		$('.errReport a.selected').removeClass('selected');
+		$('.errProcess a.selected').removeClass('selected');
 		$(obj).children().addClass('selected');
 	}
 
@@ -112,7 +114,10 @@
 			<h3><a href="#">DEMO1</a></h3>
 			<div>
                 <div class="dd-nav" style="padding: 4px 3px 4px 1px;">
-                    <dd id="demo1" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/demo/main');"><a href="#">DEMO1</a></dd>
+                    <dd id="demo1" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/demo');"><a href="#">DEMO1</a></dd>
+                    
+                    <dd id="errReport" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/wechat/app/sccn/errReport');"><a href="#">故障上报</a></dd>
+                    <dd id="errProcess" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/wechat/app/sccn/errProcess');"><a href="#">故障处理</a></dd>
                 </div>
 			</div>
 
