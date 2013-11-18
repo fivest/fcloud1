@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * @author 573
  * @date 2013-11-18
  */
-@DatabaseTable(tableName = "sccn_errReport")
+@DatabaseTable(tableName = "sccn_errreport")
 public class ErrReport extends Entity {
 
     @DatabaseField(columnName = "unit")//故障单位
