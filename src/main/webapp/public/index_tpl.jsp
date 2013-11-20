@@ -11,7 +11,7 @@
 </head>
 <body>
 <template:block name="body">
-    <div>这是模版的原生输出:</div>
+    <!-- <div>这是模版的原生输出:</div> -->
 </template:block>
 </body>
 </html>

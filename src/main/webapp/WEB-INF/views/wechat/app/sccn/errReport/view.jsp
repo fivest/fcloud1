@@ -9,12 +9,13 @@
 <html>
 <head>
     <title>故障上报 查看</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <table>
     <tr>
-        <td>故障内容:</td>
-        <td>${model.text}</td>
+        <td>故障单位:</td>
+        <td>${model.unit}</td>
     </tr>
 </table>
 </body>

@@ -77,9 +77,9 @@
 	function openCenterIframe(obj,url){
 		var u_data=new Date().getTime();
 		$('#centerIframe').attr('src', url+"?"+u_data);
-		$('.demo1 a.selected').removeClass('selected');
-		$('.errReport a.selected').removeClass('selected');
-		$('.errProcess a.selected').removeClass('selected');
+		$('#demo1 a.selected').removeClass('selected');
+		$('#errReport a.selected').removeClass('selected');
+		$('#errProcess a.selected').removeClass('selected');
 		$(obj).children().addClass('selected');
 	}
 

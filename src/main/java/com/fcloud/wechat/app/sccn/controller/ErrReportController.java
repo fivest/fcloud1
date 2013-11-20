@@ -22,13 +22,4 @@ import com.fcloud.wechat.app.sccn.repository.ErrReportRepository;
 @RequestMapping("/wechat/app/sccn/errReport")
 public class ErrReportController extends ActionController<ErrReport, ErrReportRepository> {
 
-    // override 有效
-    @Override
-    public ModelAndView index(@PageableDefaults Pageable page, WebRequest request) {
-        Page<ErrReport> models = getRepository().findAll(page);
-        logger.info("ErrReport #### demo controller !");
-        System.out.println("ErrReport #### demo controller !");
-        //throw new RuntimeException("test transaction");
-        return render("index", models);
-    }
 }

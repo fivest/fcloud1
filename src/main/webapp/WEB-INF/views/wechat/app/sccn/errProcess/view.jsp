@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>故障原因 查看</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <table>

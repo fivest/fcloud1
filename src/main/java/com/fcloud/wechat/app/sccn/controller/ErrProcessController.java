@@ -22,13 +22,6 @@ import com.fcloud.wechat.app.sccn.repository.ErrProcessRepository;
 @RequestMapping("/wechat/app/sccn/errProcess")
 public class ErrProcessController extends ActionController<ErrProcess, ErrProcessRepository> {
 
-    // override 有效
-    @Override
-    public ModelAndView index(@PageableDefaults Pageable page, WebRequest request) {
-        Page<ErrProcess> models = getRepository().findAll(page);
-        logger.info("ErrProcess #### demo controller !");
-        System.out.println("ErrProcess #### demo controller !");
-        //throw new RuntimeException("test transaction");
-        return render("index", models);
-    }
+
+
 }
