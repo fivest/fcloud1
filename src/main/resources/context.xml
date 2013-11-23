@@ -26,16 +26,12 @@
         <property name="password" value="#{fcloud.password}" />
     </bean>
 
-    <bean id="connectionSource" class="com.j256.ormlite.jdbc.DataSourceConnectionSource">
-        <constructor-arg index="0" ref="dataSource" />
-        <constructor-arg index="1" value="#{fcloud.url}" />
+    <bean id="connectionSource" class="com.fcloud.core.repository.support.OrmliteDataSourceConnectionSource">
+        <constructor-arg index="0" value="#{fcloud.url}" />
+        <constructor-arg index="1" ref="dataSource" />
     </bean>
 
     <!-- 事务 -->
-    <!--<bean id="transactionManager" class="com.fcloud.core.repository.support.OrmliteTransactionManager" />-->
-    <!--<bean id="ormliteTx" class="com.j256.ormlite.misc.TransactionManager" init-method="initialize">-->
-        <!--<property name="connectionSource" ref="connectionSource" />-->
-    <!--</bean>-->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource" />
     </bean>
