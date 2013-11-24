@@ -17,6 +17,7 @@
         <ormlite.version>4.47</ormlite.version>
         <jstl.version>1.2</jstl.version>
         <log4j.version>1.2.14</log4j.version>
+        <json-lib.version>2.4</json-lib.version>
     </properties>
 
     <dependencies>
@@ -65,6 +66,13 @@
             <version>${log4j.version}</version>
             <scope>provided</scope>
         </dependency>
+        
+		<dependency>    
+		    <groupId>net.sf.json-lib</groupId>    
+		    <artifactId>json-lib</artifactId>    
+		    <version>${json-lib.version}</version>    
+		    <classifier>jdk15</classifier>    
+		</dependency>
 
         <!-- servlet -->
         <dependency>
