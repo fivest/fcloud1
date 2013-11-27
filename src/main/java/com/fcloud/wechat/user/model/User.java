@@ -66,17 +66,37 @@ public class User extends NamedEntity {
         this.mobile = mobile;
     }
 
-    /**
-     * 用户级别
-     */
-    @DatabaseField(canBeNull = false, foreign = true)
-    protected UserLevel level;
+    @DatabaseField(columnName = "user_level", width = 2)
+    protected Integer userLevel = 0; // 当前默认为0，现在暂时不区分用户
 
-    public UserLevel getLevel() {
-        return level;
+    public Integer getUserLevel() {
+        return userLevel;
     }
 
-    public void setLevel(UserLevel level) {
-        this.level = level;
+    public void setUserLevel(Integer userLevel) {
+        this.userLevel = userLevel;
     }
+
+    protected String repeatPwd;
+
+    public String getRepeatPwd() {
+        return repeatPwd;
+    }
+
+    public void setRepeatPwd(String repeatPwd) {
+        this.repeatPwd = repeatPwd;
+    }
+    //    /**
+//     * 用户级别
+//     */
+//    @DatabaseField(canBeNull = false, foreign = true)
+//    protected UserLevel level;
+//
+//    public UserLevel getLevel() {
+//        return level;
+//    }
+//
+//    public void setLevel(UserLevel level) {
+//        this.level = level;
+//    }
 }
