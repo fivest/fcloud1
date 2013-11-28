@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>欢迎访问FCloud</title>
@@ -118,6 +119,9 @@
                     
                     <dd id="errReport" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/wechat/app/sccn/errReport');"><a href="#">故障上报</a></dd>
                     <dd id="errProcess" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/wechat/app/sccn/errProcess');"><a href="#">故障处理</a></dd>
+					
+					
+					<dd id="errProcess" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/wechat/app/cihezh/canzhanshang');"><a href="#">参展商</a></dd>
                 </div>
 			</div>
 

@@ -2,6 +2,7 @@
 <%@ taglib prefix="template" uri="http://www.fcloud.com/taglib/template" %>
 
 <template:template>
+<!DOCTYPE html>
 <html>
 <head>
     <title><template:block name="title">基础模版</template:block></title>

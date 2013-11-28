@@ -23,9 +23,9 @@ public class MenuManager {
 	
 	public static void main(String[] args) {
 		// 第三方用户唯一凭证
-		String appId = "wx359186d81de37760";
+		String appId = "wx1d9a33135bcb4560";
 		// 第三方用户唯一凭证密钥
-		String appSecret = "add1f20d1a55f0358f2f40aa8198838a";
+		String appSecret = "c606b9c3701a7f29e1efae3b9ec101d8";
 
 		// 调用接口获取access_token
 		AccessToken at = WeixinUtil.getAccessToken(appId, appSecret);
@@ -51,38 +51,72 @@ public class MenuManager {
 	 */
 	private static Menu getMenu() {
 		ViewButton btn11 = new ViewButton();
-		btn11.setName("故障上报");
+		btn11.setName("会议简介");
 		btn11.setType("view");
-		btn11.setUrl("http://fcloud.duapp.com/wechat/app/sccn/errReport");
+		btn11.setUrl("http://219.134.186.37/wechat/app/cihezh/hyjj");
 
-
+		ViewButton btn12 = new ViewButton();
+		btn12.setName("会议议程");
+		btn12.setType("view");
+		btn12.setUrl("http://219.134.186.37/wechat/app/cihezh/hyyc");
+		
+		ViewButton btn13 = new ViewButton();
+		btn13.setName("参展商报名");
+		btn13.setType("view");
+		btn13.setUrl("http://219.134.186.37/wechat/app/cihezh/canzhanshang/create");
+		
 		ViewButton btn21 = new ViewButton();
-		btn21.setName("故障处理");
+		btn21.setName("首席赞助");
 		btn21.setType("view");
-		btn21.setUrl("http://fcloud.duapp.com/wechat/app/sccn/errProcess");
+		btn21.setUrl("http://219.134.186.37/wechat/app/cihezh/sxzz");
+
+		ViewButton btn22 = new ViewButton();
+		btn22.setName("开幕式赞助");
+		btn22.setType("view");
+		btn22.setUrl("http://219.134.186.37/wechat/app/cihezh/kmszz");
+		
+		ViewButton btn23 = new ViewButton();
+		btn23.setName("联合赞助");
+		btn23.setType("view");
+		btn23.setUrl("http://219.134.186.37/wechat/app/cihezh/lhzz");
 
 
 		ViewButton btn31 = new ViewButton();
-		btn31.setName("关于我们");
+		btn31.setName("联系方式");
 		btn31.setType("view");
-		btn31.setUrl("http://fcloud.duapp.com/wechat/app/sccn/about");
+		btn31.setUrl("http://219.134.186.37/wechat/app/cihezh/lxfs");
 
 		ViewButton btn32 = new ViewButton();
-		btn32.setName("账号绑定");
+		btn32.setName("展会反馈");
 		btn32.setType("view");
-		btn32.setUrl("http://fcloud.duapp.com/wechat/app/sccn/bind");
-
+		btn32.setUrl("http://219.134.186.37/wechat/app/cihezh/zhanhfk/create");
+		
+		CommonButton btn33 = new CommonButton();
+		btn33.setName("展会墙");
+		btn33.setType("click");
+		btn33.setKey("zhq");
+		
+		ComplexButton mainBtn1 = new ComplexButton();
+		mainBtn1.setName("展会介绍");
+		mainBtn1
+				.setSub_button(new Button[] { btn11, btn12, btn13});		
+		
+		ComplexButton mainBtn2 = new ComplexButton();
+		mainBtn2.setName("展会赞助");
+		mainBtn2
+				.setSub_button(new Button[] { btn21, btn22, btn23});
+		
 		ComplexButton mainBtn3 = new ComplexButton();
-		mainBtn3.setName("关于");
+		mainBtn3.setName("展会信息");
 		mainBtn3
-				.setSub_button(new ViewButton[] { btn31, btn32});
+				.setSub_button(new Button[] { btn31, btn32, btn33});
 
 		/**
 		 * 在某个一级菜单下没有二级菜单的情况，menu这样定义 menu.setButton(new Button[] { mainBtn1,
 		 * mainBtn2, btn33 });
 		 */
 		Menu menu = new Menu();
-		menu.setButton(new Button[] { btn11, btn21, mainBtn3 });
+		menu.setButton(new Button[] { mainBtn1, mainBtn2, mainBtn3 });
 
 		return menu;
 	}
