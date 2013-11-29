@@ -76,6 +76,8 @@
 
 
 	function openCenterIframe(obj,url){
+        var jObj = $(obj);
+        url = url == null ? jObj.attr('data-url') : url;
 		var u_data=new Date().getTime();
 		$('#centerIframe').attr('src', url+"?"+u_data);
 		$('#demo1 a.selected').removeClass('selected');
@@ -125,13 +127,13 @@
                 </div>
 			</div>
 
-			<h3><a href="#">Section 2</a></h3>
+			<h3><a href="#">管理员</a></h3>
 			<div>
-				<h5>Sed Non Urna</h5>
-				<p>Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus.
-					Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit,
-					faucibus interdum tellus libero ac justo.</p>
-				<p>Vivamus non quam. In suscipit faucibus urna.</p>
+                <div class="dd-nav" style="padding: 4px 3px 4px 1px;">
+                    <dd id="users"
+                        data-url="<%=request.getContextPath()%>/user"
+                        onclick="openCenterIframe(this);"><a href="#">用户列表</a></dd>
+                </div>
 			</div>
 
 	</div>

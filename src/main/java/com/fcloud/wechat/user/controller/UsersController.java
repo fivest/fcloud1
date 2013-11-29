@@ -20,7 +20,7 @@ public class UsersController extends MultiResourcesController {
 
     @RequestMapping(value = {"/signup", "/users/signup"}, method = RequestMethod.GET)
     public ModelAndView signup() {
-        return render("wechat/users/signup");
+        return render("wechat/users/signup", new User());
     }
 
     @RequestMapping(value = {"/signup", "/users/signup"}, method = RequestMethod.POST)

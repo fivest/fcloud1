@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,7 +41,10 @@ public abstract class BaseController extends EventPublisherController {
     }
 
     protected String resolveView(String view) {
-        if (view == null || view.startsWith("/") || view.startsWith("redirect:")) {
+        if (view == null
+                || view.startsWith("/")
+                || view.startsWith("redirect:")
+                || StringUtils.isEmpty(rootPath)) {
             return view;
         }
         return rootPath + "/" + view;

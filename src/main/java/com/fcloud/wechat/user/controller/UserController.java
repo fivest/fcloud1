@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Ruben Fu
  */
 @Controller
-@RequestMapping("/user")
+@RequestMapping({"/wechat/user", "/user"})
 public class UserController extends ActionController<User, UserRepository> {
 }

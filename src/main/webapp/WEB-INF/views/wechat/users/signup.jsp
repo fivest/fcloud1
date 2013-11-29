@@ -22,11 +22,11 @@
         </tr>
         <tr>
             <td>密码:</td>
-            <td><form:input path="password" /><form:errors path="password" cssStyle="color: red"/></td>
+            <td><form:password path="password" /><form:errors path="password" cssStyle="color: red"/></td>
         </tr>
         <tr>
             <td>重复输入:</td>
-            <td><input type="text" name="repeatPwd"><form:errors path="repeatPwd" cssStyle="color: red"/></td>
+            <td><form:password path="repeatPwd" /><form:errors path="repeatPwd" cssStyle="color: red"/></td>
         </tr>
         <tr>
             <td colspan="2">

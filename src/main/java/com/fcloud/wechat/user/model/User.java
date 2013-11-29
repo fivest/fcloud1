@@ -25,10 +25,10 @@ public class User extends NamedEntity {
     }
 
     /**
-     * 状态
+     * 状态 0禁用 1活动
      */
     @DatabaseField(columnName = "status", width = 2)
-    protected Integer status;
+    protected Integer status = 1;
 
     public Integer getStatus() {
         return status;
