@@ -22,7 +22,7 @@ public class PagingAndSortingMethodArgumentResolver implements HandlerMethodArgu
 
     private static final int noFindParamNumber = -1;
     private static final int DEFAULT_PAGE = 1;
-    private static final int defaultPageSize = 20;
+    private static final int defaultPageSize = 10;
     private static final Pageable DEFAULT_PAGE_REQUEST = new PageRequest(DEFAULT_PAGE - 1, defaultPageSize);
 
     private static final String pageParamName = "page";
