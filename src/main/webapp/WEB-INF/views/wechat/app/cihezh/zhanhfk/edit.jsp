@@ -24,22 +24,24 @@
 
 <div data-role="fieldcontain">
 	<label for="fknr">反馈内容</label>
-	<textarea cols="40" rows="8" name="fknr" id="fknr"></textarea>
+	<form:textarea cols="40" rows="8" path="fknr" />
 </div>
 
 <div data-role="fieldcontain">
     <label for="tel">手机号</label>
-    <input type="tel" name="tel" id="tel" placeholder="请填写联系方式" value="">
+    <form:input type="tel" path="tel" placeholder="请填写联系方式" value="" />
 </div>
 
 <div data-role="fieldcontain">
     <label for="wenum">微信号</label>
-    <input type="email" name="wenum" id="wenum" placeholder="请填写个人微信号" value="">
+    <form:input type="email" path="wenum" placeholder="请填写个人微信号" value="" />
 </div>
 
-
-<div class="ui-block-a"><button data-theme="b" onclick="javascript:$('#zhanhfkForm').submit();">提交反馈</button></div>
-
+<c:if test="${model.isNew}">
+	<div class="ui-block-a">
+		<button data-theme="b" onclick="javascript:$('#zhanhfkForm').submit();">提交反馈</button>
+	</div>
+</c:if>
 
 
 

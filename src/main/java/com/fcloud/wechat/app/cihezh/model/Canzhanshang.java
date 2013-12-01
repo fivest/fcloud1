@@ -1,5 +1,7 @@
 package com.fcloud.wechat.app.cihezh.model;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.fcloud.core.model.Entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -27,15 +29,18 @@ public class Canzhanshang extends Entity {
     
     @DatabaseField(columnName = "czmd")//参展目的
     private String czmd;
+    String[] arrayCzmd;
 
     @DatabaseField(columnName = "hkgg")//会刊广告
     private String hkgg;
+    String[] arrayHkgg;
    
     @DatabaseField(columnName = "zwyd")//展位预定
     private String zwyd;
     
     @DatabaseField(columnName = "mp")//门票等印刷品
     private String mp;
+    String[] arrayMp;
 
 	public String getName() {
 		return name;
@@ -76,6 +81,20 @@ public class Canzhanshang extends Entity {
 	public void setCzmd(String czmd) {
 		this.czmd = czmd;
 	}
+	///////////////////
+	public String[] getArrayCzmd() {
+		if(czmd != null)
+			return czmd.split(",");
+		else
+			return null;
+	}
+
+	public void setArrayCzmd(String[] arrayCzmd) {
+		czmd = StringUtils.join(arrayCzmd, ",");
+	}	
+	//////////////////
+	
+	
 
 	public String getHkgg() {
 		return hkgg;
@@ -84,7 +103,18 @@ public class Canzhanshang extends Entity {
 	public void setHkgg(String hkgg) {
 		this.hkgg = hkgg;
 	}
+	///////////////////
+	public String[] getArrayHkgg() {
+		if(hkgg != null)
+			return hkgg.split(",");
+		else
+			return null;
+	}
 
+	public void setArrayHkgg(String[] arrayHkgg) {
+		hkgg = StringUtils.join(arrayHkgg, ",");
+	}	
+	//////////////////
 	public String getZwyd() {
 		return zwyd;
 	}
@@ -101,5 +131,16 @@ public class Canzhanshang extends Entity {
 		this.mp = mp;
 	}
 
-   
+	///////////////////
+	public String[] getArrayMp() {
+		if(mp != null)
+			return mp.split(",");
+		else
+			return null;
+	}
+
+	public void setArrayMp(String[] arrayMp) {
+		mp = StringUtils.join(arrayMp, ",");
+	}	
+	//////////////////
 }

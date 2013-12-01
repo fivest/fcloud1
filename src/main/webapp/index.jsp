@@ -56,6 +56,8 @@
 			// RESIZE Accordion widget when panes resize
 		,	west__onresize:		$.layout.callbacks.resizePaneAccordions
 		,	east__onresize:		$.layout.callbacks.resizePaneAccordions
+		,	north__spacing_open:					0
+		,	north__spacing_closed:					0
 		});
 
 		// ACCORDION - in the West pane
@@ -74,18 +76,14 @@
 
 
 
-
 	function openCenterIframe(obj,url){
         var jObj = $(obj);
         url = url == null ? jObj.attr('data-url') : url;
 		var u_data=new Date().getTime();
 		$('#centerIframe').attr('src', url+"?"+u_data);
-		$('#demo1 a.selected').removeClass('selected');
-		$('#errReport a.selected').removeClass('selected');
-		$('#errProcess a.selected').removeClass('selected');
+		$('.dd-nav dd a.selected').removeClass('selected');
 		$(obj).children().addClass('selected');
 	}
-
 
 
 
@@ -93,7 +91,7 @@
 </head>
 <body>
 
-<div class="ui-layout-north ui-widget-content" style="display: none;">
+<div class="ui-layout-north ui-widget-content" style="display: none;overflow:hidden;">
 	<div id="switcher" style="float: right; margin-right: 60px;"></div>
 	FCloud System
 </div>
@@ -123,7 +121,9 @@
                     <dd id="errProcess" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/wechat/app/sccn/errProcess');"><a href="#">故障处理</a></dd>
 					
 					
-					<dd id="errProcess" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/wechat/app/cihezh/canzhanshang');"><a href="#">参展商</a></dd>
+					<dd id="canzhanshang" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/wechat/app/cihezh/canzhanshang');"><a href="#">参展商</a></dd>
+					<dd id="zhanhfk" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/wechat/app/cihezh/zhanhfk');"><a href="#">展会反馈</a></dd>
+					
                 </div>
 			</div>
 
