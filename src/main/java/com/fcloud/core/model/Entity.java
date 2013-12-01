@@ -10,6 +10,7 @@ public class Entity implements Persistable {
 
     @DatabaseField(id = true, columnName = "id", width = 36, canBeNull = false)
     protected String id;
+    protected boolean isNew;
 
     public String getId() {
         if (id == null) {
@@ -23,6 +24,12 @@ public class Entity implements Persistable {
     }
 
     public boolean isNew() {
-        return id == null;
+    	isNew= id == null;
+        return isNew;
     }
+    
+    public boolean getIsNew() {
+    	return isNew;
+    }
+    
 }
