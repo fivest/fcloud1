@@ -61,9 +61,14 @@ public class MenuManager {
 		btn12.setUrl("http://219.134.186.37/wechat/app/cihezh/hyyc");
 		
 		ViewButton btn13 = new ViewButton();
-		btn13.setName("参展商报名");
+		btn13.setName("展会平面图");
 		btn13.setType("view");
-		btn13.setUrl("http://219.134.186.37/wechat/app/cihezh/canzhanshang/create");
+		btn13.setUrl("http://219.134.186.37/public/app/cihezh/zhpmt.jsp");
+		
+		ViewButton btn14 = new ViewButton();
+		btn14.setName("参展商报名");
+		btn14.setType("view");
+		btn14.setUrl("http://219.134.186.37/wechat/app/cihezh/canzhanshang/create");
 		
 		ViewButton btn21 = new ViewButton();
 		btn21.setName("首席赞助");
@@ -80,26 +85,30 @@ public class MenuManager {
 		btn23.setType("view");
 		btn23.setUrl("http://219.134.186.37/wechat/app/cihezh/lhzz");
 
-
 		ViewButton btn31 = new ViewButton();
-		btn31.setName("联系方式");
+		btn31.setName("交通指引");
 		btn31.setType("view");
-		btn31.setUrl("http://219.134.186.37/wechat/app/cihezh/lxfs");
-
-		ViewButton btn32 = new ViewButton();
-		btn32.setName("展会反馈");
-		btn32.setType("view");
-		btn32.setUrl("http://219.134.186.37/wechat/app/cihezh/zhanhfk/create");
+		btn31.setUrl("http://219.134.186.37/public/app/cihezh/jtzy.jsp");
 		
-		CommonButton btn33 = new CommonButton();
-		btn33.setName("展会墙");
-		btn33.setType("click");
-		btn33.setKey("zhq");
+		ViewButton btn32 = new ViewButton();
+		btn32.setName("联系方式");
+		btn32.setType("view");
+		btn32.setUrl("http://219.134.186.37/wechat/app/cihezh/lxfs");
+
+		ViewButton btn33 = new ViewButton();
+		btn33.setName("展会反馈");
+		btn33.setType("view");
+		btn33.setUrl("http://219.134.186.37/wechat/app/cihezh/zhanhfk/create");
+		
+		CommonButton btn34 = new CommonButton();
+		btn34.setName("展会墙");
+		btn34.setType("click");
+		btn34.setKey("zhq");
 		
 		ComplexButton mainBtn1 = new ComplexButton();
 		mainBtn1.setName("展会介绍");
 		mainBtn1
-				.setSub_button(new Button[] { btn11, btn12, btn13});		
+				.setSub_button(new Button[] { btn11, btn12, btn13, btn14});		
 		
 		ComplexButton mainBtn2 = new ComplexButton();
 		mainBtn2.setName("展会赞助");
@@ -109,7 +118,7 @@ public class MenuManager {
 		ComplexButton mainBtn3 = new ComplexButton();
 		mainBtn3.setName("展会信息");
 		mainBtn3
-				.setSub_button(new Button[] { btn31, btn32, btn33});
+				.setSub_button(new Button[] { btn31, btn32, btn33, btn34});
 
 		/**
 		 * 在某个一级菜单下没有二级菜单的情况，menu这样定义 menu.setButton(new Button[] { mainBtn1,

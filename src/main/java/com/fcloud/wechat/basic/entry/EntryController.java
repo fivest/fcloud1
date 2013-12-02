@@ -112,7 +112,13 @@ public class EntryController {
 			if ("subscribe".equals(map.get("xml.Event"))) {
 				// 订阅
 				// //resInfo = resText("欢迎订阅开发者！", map);
-				sbtmp = resText("欢迎您关注2013中国（深圳）国际健康产业博览会", map);
+				//sbtmp = resText("欢迎您关注2013中国（深圳）国际健康产业博览会", map);
+				sbtmp = resSubscribe(
+						"欢迎您关注2013中国（深圳）国际健康产业博览会官方微信",
+						"展会将于2013年12月11日至13日在深圳会展中心3号馆举行，欢迎您的到来！",
+						"http://219.134.186.37/public/app/cihezh/home09.jpg",
+						"http://219.134.186.37/wechat/app/cihezh/hyjj",
+						map);
 			} else if ("unsubscribe".equals(map.get("xml.Event"))) {
 				// 取消订阅
 				System.out
@@ -149,6 +155,41 @@ public class EntryController {
 				"</CreateTime><MsgType><![CDATA[text]]></MsgType>").append(
 				"<Content><![CDATA[").append(str).append("]]></Content>")
 				.append("<FuncFlag>0</FuncFlag></xml>");
+		return sb;
+	}
+	// 回复订阅事件
+	public StringBuffer resSubscribe(String title, String description,
+			String picurl, String url, Map<String, String> map) {
+		StringBuffer sbtmp = new StringBuffer();
+		sbtmp = linkNormal("news", map);
+		sbtmp.append("<ArticleCount><![CDATA[").append("1").append(
+				"]]></ArticleCount>");
+		sbtmp.append("<Articles>");
+
+		// 第一个开始
+		sbtmp.append("<item>");
+		sbtmp.append("<Title><![CDATA[").append(title).append("]]></Title>");
+		sbtmp.append("<Description><![CDATA[").append(description).append(
+				"]]></Description>");
+		sbtmp.append("<PicUrl><![CDATA[").append(picurl).append("]]></PicUrl>");
+		sbtmp.append("<Url><![CDATA[").append(url).append("]]></Url>");
+		sbtmp.append("</item>");
+		// 第一个结束
+
+		sbtmp.append("</Articles>");
+		sbtmp.append("</xml>");
+		return sbtmp;
+	}
+	// 拼装通用串
+	public StringBuffer linkNormal(String MsgType, Map<String, String> map) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<xml><ToUserName><![CDATA[").append(
+				map.get("xml.FromUserName")).append(
+				"]]></ToUserName><FromUserName><![CDATA[").append(
+				map.get("xml.ToUserName")).append(
+				"]]></FromUserName><CreateTime>").append(
+				map.get("xml.CreateTime")).append(
+				"</CreateTime><MsgType><![CDATA[" + MsgType + "]]></MsgType>");
 		return sb;
 	}
 }
