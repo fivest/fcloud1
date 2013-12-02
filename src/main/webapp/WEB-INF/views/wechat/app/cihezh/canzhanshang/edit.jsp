@@ -19,7 +19,7 @@
 <form:form id="canzhanshangForm" action="/wechat/app/cihezh/canzhanshang${fn:idp(model)}" method="POST" commandName="model">
 <form:hidden path="id" />
 <div data-role="page">
-
+<center><img src="/public/app/cihezh/bannerbg.jpg" width="100%" /></center>
   <div data-role="content">
 
 <div data-role="fieldcontain">

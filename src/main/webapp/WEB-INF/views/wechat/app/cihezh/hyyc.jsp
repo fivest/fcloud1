@@ -11,27 +11,30 @@
 	<SCRIPT type="text/javascript" src="/public/js/jquery.min.js"></SCRIPT>
 	<script type="text/javascript" src="/public/jquerymobile/js/jquery.mobile-1.3.2.min.js"></script>
 	<style>
-	body{line-height: 1.45;}
+	body{line-height: 1.45;position: absolute;left:10px;right:10px;}
+	b{color:#0b5487;}
 	</style>
     </template:block>
     <template:block name="body">
         <template:super />
+        <h3>&nbsp;&nbsp;会议议程</h3>
+<center><img src="/public/app/cihezh/home02.jpg" width="100%" /></center>    
 <p>  
-（一）会议时间
+<b>（一）会议时间</b>
 <br>
 　　2013年12月11号下午。（暂定）
 <p>
-（二）会议地点
+<b>（二）会议地点</b>
 <br>
 　　深圳会展中心3号馆。 （暂定）
 <p>
-（三）组织单位
+<b>（三）组织单位</b>
 <br>
 　　1、主办单位：中国（深圳）国际健康产业博览会组委会
 <br>
 　　2、承办单位：汇金融通金融联盟、深圳世界贸易中心会、深圳市君诺投资顾问有限公司、深圳市创新投资集团有限公司、广东华商律师事务所
 <p>
-（四）会议参加对象
+<b>（四）会议参加对象</b>
 <br>
 　　本次会议的参加对象主要分为金融（投资）机构以及参会（项目）企业两个层面：
 <br>
@@ -41,6 +44,8 @@
 <p>   
 <div align="center"><img style="width:100%" src="/public/app/cihezh/hyyc.jpg" /></div> 
 
-<br><br><br>   
+<br>
+  <%@ include file="/public/app/cihezh/bottom.jsp"%>
+  <br>
     </template:block>
 </template:template>
