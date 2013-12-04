@@ -1,9 +1,11 @@
 package com.fcloud.wechat.user.form;
 
+import com.fcloud.core.form.Form;
+
 /**
  * @author Ruben Fu
  */
-public class LoginForm {
+public class LoginForm implements Form  {
 
     private String username;
 

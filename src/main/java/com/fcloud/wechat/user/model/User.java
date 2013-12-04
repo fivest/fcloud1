@@ -7,6 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
 /**
  * @author Ruben Fu
  */
+@SuppressWarnings("serial")
 @DatabaseTable(tableName = "we_users")
 public class User extends NamedEntity {
 

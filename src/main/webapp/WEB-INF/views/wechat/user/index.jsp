@@ -11,21 +11,18 @@
         <template:super />
         <a href="<%=request.getContextPath()%>/user/create" target="_blank">新增</a>
         <table style="width: 100%;border-collapse: collapse">
-            <thead>
-                <td>
-
+        	<c:forEach items="${page.content}" var="m" varStatus="vs">
+            <tr>
+            	<td>${vs.index + 1}</td>
+            	<td><a href="<%=request.getContextPath()%>/user/${m.id}" target="_blank">${m.name}</a></td>
+            	<td>${m.email}</td>
+            	<td>
+	                <a href="<%=request.getContextPath()%>/user/${m.id}/edit" target="_blank">编辑</a>
+	                <a href="<%=request.getContextPath()%>/user/${m.id}/status?_method=DELETE" target="_blank">禁用</a>
                 </td>
-            </thead>
-
+            </tr>
+        	</c:forEach>
         </table>
-        <c:forEach items="${page.content}" var="m">
-            <div>
-                <a href="<%=request.getContextPath()%>/user/${m.id}" target="_blank">${m.name}</a>
-                <a href="<%=request.getContextPath()%>/user/${m.id}" target="_blank">${m.email}</a>
-                <a href="<%=request.getContextPath()%>/user/${m.id}/edit" target="_blank">编辑</a>
-                <a href="<%=request.getContextPath()%>/user/${m.id}/status?_method=DELETE" target="_blank">禁用</a>
-            </div>
-        </c:forEach>
-        count: ${page.total}, page: ${page.page}, limit: ${page.size}
+        总共: ${page.total}, 当前页: ${page.page}, 每页: ${page.size}
     </template:block>
 </template:template>

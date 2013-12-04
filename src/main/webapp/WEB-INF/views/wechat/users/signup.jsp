@@ -2,14 +2,14 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
-    <title>Demo Main 编辑</title>
+    <title>用户注册</title>
 </head>
 <body>
 
-<h1>用户注册</h1>
+<h1 style="text-align: center;">用户注册</h1>
 
-<div style="text-align: center">
-<form:form action="/users/signup" method="POST" modelAttribute="model">
+<div style="text-align: center; width: 300px; margin: 30px auto;">
+<form:form action="/signup" method="POST" commandName="model">
     <form:hidden path="id" />
     <table style="width: 500px;">
         <tr>

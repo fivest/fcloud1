@@ -17,10 +17,7 @@ public class LoginFormValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", null, "登录名不可以为空！");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", null, "登录名不可以为空！");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", null, "密码不可以为空！");
-
-        LoginForm user = (LoginForm) target;
-
     }
 }

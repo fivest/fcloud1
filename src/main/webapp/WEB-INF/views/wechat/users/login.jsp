@@ -2,35 +2,26 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
-    <title>Demo Main 编辑</title>
+    <title>用户登录</title>
 </head>
 <body>
 
-<h1>用户注册</h1>
+<h1 style="text-align: center;">用户登录</h1>
 
-<div style="text-align: center">
-    <form:form action="/users/signup" method="POST" modelAttribute="model">
-        <form:hidden path="id" />
+<div style="text-align: center;width: 300px; margin: 50px auto;">
+    <form:form action="/login" method="POST" modelAttribute="form">
         <table style="width: 500px;">
             <tr>
                 <td>登录名:</td>
-                <td><form:input path="name" /><form:errors path="name" cssStyle="color: red"/></td>
-            </tr>
-            <tr>
-                <td>邮箱:</td>
-                <td><form:input path="email" /><form:errors path="email" cssStyle="color: red"/></td>
+                <td><form:input path="username" /><form:errors path="username" cssStyle="color: red"/></td>
             </tr>
             <tr>
                 <td>密码:</td>
-                <td><form:input path="password" /><form:errors path="password" cssStyle="color: red"/></td>
-            </tr>
-            <tr>
-                <td>重复输入:</td>
-                <td><input type="text" name="_password"><form:errors path="password" cssStyle="color: red"/></td>
+                <td><form:password path="password" /><form:errors path="password" cssStyle="color: red"/></td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <input type="submit" value="注册" />
+                    <input type="submit" value="登录" />
                 </td>
             </tr>
         </table>

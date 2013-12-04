@@ -1,8 +1,7 @@
 package com.fcloud.core.controller;
 
-import com.fcloud.core.model.Page;
-import com.fcloud.core.model.Persistable;
-import com.fcloud.core.repository.support.Repositories;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import com.fcloud.core.form.Form;
+import com.fcloud.core.model.Page;
+import com.fcloud.core.model.Persistable;
+import com.fcloud.core.repository.support.Repositories;
 
 /**
  * @author Ruben Fu
@@ -52,6 +54,10 @@ public abstract class BaseController extends EventPublisherController {
 
     protected ModelAndView render(String view) {
         return new ModelAndView(resolveView(view));
+    }
+    
+    protected ModelAndView render(String view, Form form) {
+        return new ModelAndView(resolveView(view), "form", form);
     }
 
     protected ModelAndView render(String view, Persistable model) {

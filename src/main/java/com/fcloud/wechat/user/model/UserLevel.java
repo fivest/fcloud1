@@ -2,12 +2,12 @@ package com.fcloud.wechat.user.model;
 
 import com.fcloud.core.model.NamedEntity;
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
 /**
  * @author Ruben Fu
  */
-@DatabaseTable(tableName = "we_user_level")
+//@DatabaseTable(tableName = "we_user_level")
+@SuppressWarnings("serial")
 public class UserLevel extends NamedEntity {
 
     @DatabaseField(columnName = "value", width = 2, unique = true)
