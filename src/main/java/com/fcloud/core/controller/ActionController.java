@@ -53,7 +53,7 @@ public abstract class ActionController<T extends Persistable, R extends PagingAn
         return render("edit", model);
     }
 
-    @RequestMapping(value = {"/{id1}"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/{id}"}, method = RequestMethod.POST)
     @Transactional
     public ModelAndView update(@ModelAttribute T model, WebRequest request) {
         getRepository().save(model);

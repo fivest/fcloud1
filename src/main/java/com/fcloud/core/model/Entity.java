@@ -6,11 +6,13 @@ import com.j256.ormlite.field.DatabaseField;
 /**
  * @author Ruben Fu
  */
+@SuppressWarnings("serial")
 public class Entity implements Persistable {
 
     @DatabaseField(id = true, columnName = "id", width = 36, canBeNull = false)
     protected String id;
-    protected boolean isNew;
+    
+    transient protected Boolean isNew;
 
     public String getId() {
         if (id == null) {
@@ -21,10 +23,12 @@ public class Entity implements Persistable {
 
     public void setId(String id) {
         this.id = id;
+        isNew = false;
     }
 
     public boolean isNew() {
-    	isNew= id == null;
+    	if (isNew == null)
+    		isNew = (id == null);
         return isNew;
     }
     
