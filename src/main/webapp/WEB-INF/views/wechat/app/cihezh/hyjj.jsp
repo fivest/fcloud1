@@ -11,8 +11,10 @@
 	<SCRIPT type="text/javascript" src="/public/js/jquery.min.js"></SCRIPT>
 	<script type="text/javascript" src="/public/jquerymobile/js/jquery.mobile-1.3.2.min.js"></script>
 	<style>
-	body{line-height: 1.45;position: absolute;left:10px;right:10px;}
+	body{line-height: 1.65;position: absolute;left:10px;right:10px;}
 	b{color:#0b5487;}
+	.bjbt{background-color: #3597FA;color:#ffffff;}
+	.inheight{line-height: 0.5;}
 	</style>
     </template:block>
     <template:block name="body">
@@ -37,10 +39,10 @@
 　　2、引领投资机构发现健康产业的投资机会；<br>
 　　3、挖掘健康产业的优秀项目和企业，了解其资本以及发展需求；<br>
 　　4、实现投资机构与健康产业的优秀企业的项目对接，共同推动我国健康产业的资本化进程。
- <br><br>
-  
+
+ <br><br>  
 
   <%@ include file="/public/app/cihezh/bottom.jsp"%>
-        
+<br>      
     </template:block>
 </template:template>
