@@ -133,6 +133,9 @@
                     <dd id="users"
                         data-url="<%=request.getContextPath()%>/user"
                         onclick="openCenterIframe(this);"><a href="#">用户列表</a></dd>
+                    <dd id="users"
+                        data-url="<%=request.getContextPath()%>/wechat/auth/module_access"
+                        onclick="openCenterIframe(this);"><a href="#">模块路径</a></dd>
                 </div>
 			</div>
 

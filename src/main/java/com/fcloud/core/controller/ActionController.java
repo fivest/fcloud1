@@ -1,16 +1,18 @@
 package com.fcloud.core.controller;
 
-import com.fcloud.core.model.Page;
-import com.fcloud.core.model.Pageable;
-import com.fcloud.core.model.Persistable;
-import com.fcloud.core.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.fcloud.core.model.Page;
+import com.fcloud.core.model.Pageable;
+import com.fcloud.core.model.Persistable;
+import com.fcloud.core.repository.PagingAndSortingRepository;
 
 /**
  * @author Ruben Fu
@@ -34,7 +36,7 @@ public abstract class ActionController<T extends Persistable, R extends PagingAn
 
     @RequestMapping(value = {"/", ""}, method = RequestMethod.POST)
     @Transactional
-    public ModelAndView save(@ModelAttribute T model, WebRequest request) {
+    public ModelAndView save(@ModelAttribute T model, WebRequest request, BindingResult result) {
         getRepository().save(model);
         return render("/public/success");
     }
@@ -55,7 +57,7 @@ public abstract class ActionController<T extends Persistable, R extends PagingAn
 
     @RequestMapping(value = {"/{id}"}, method = RequestMethod.POST)
     @Transactional
-    public ModelAndView update(@ModelAttribute T model, WebRequest request) {
+    public ModelAndView update(@ModelAttribute T model, WebRequest request, BindingResult result) {
         getRepository().save(model);
         return render("/public/success");
     }

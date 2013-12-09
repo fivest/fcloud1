@@ -44,4 +44,8 @@ public class SessionUser {
 	public void setUserid(String userid) {
 		this.userid = userid;
 	}
+	
+	public boolean isAdmin() {
+		return ("admin".equals(username));
+	}
 }

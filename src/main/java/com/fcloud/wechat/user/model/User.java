@@ -12,7 +12,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public class User extends NamedEntity {
 
     /**
-     * 秘密
+     * 密码
      */
     @DatabaseField(columnName = "password", width = 200)
     protected String password;

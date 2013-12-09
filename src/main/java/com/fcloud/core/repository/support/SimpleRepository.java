@@ -54,6 +54,7 @@ public class SimpleRepository<T> implements OrmliteRepository<T>, SingleModelRep
     }
 
     protected RuntimeException wrapException(Exception ex) {
+    	ex.printStackTrace();
         if (ex instanceof RuntimeException) {
             return (RuntimeException) ex;
         }
