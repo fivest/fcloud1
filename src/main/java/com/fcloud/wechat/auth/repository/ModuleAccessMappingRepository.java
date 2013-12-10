@@ -22,7 +22,7 @@ import com.j256.ormlite.stmt.DeleteBuilder;
 @Repository
 public class ModuleAccessMappingRepository extends SimpleRepository<ModuleAccessMapping> {
 
-	public Iterable<ModuleAccessMapping> findUserMapping(String userid) {
+	public List<ModuleAccessMapping> findUserMapping(String userid) {
 		try {
 			return getDao().queryBuilder().where().eq("user_id", userid).query();
 		} catch (SQLException e) {
