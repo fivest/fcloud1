@@ -25,6 +25,14 @@
         <property name="username" value="#{fcloud.username}" />
         <property name="password" value="#{fcloud.password}" />
     </bean>
+<!--
+<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+	<property name="url" value="jdbc:mysql://sqld.duapp.com:4050/wmvkOxiwqQLBMgjJmgCP?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8" />
+	<property name="username" value="#{ systemProperties['BAE_ENV_AK'] }" />
+	<property name="password" value="#{ systemProperties['BAE_ENV_SK'] }" />
+</bean>
+-->
 
     <bean id="connectionSource" class="com.fcloud.core.repository.support.OrmliteDataSourceConnectionSource">
         <constructor-arg index="0" value="#{fcloud.url}" />
