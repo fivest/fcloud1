@@ -32,7 +32,35 @@
 
     <div data-role="content">
         <ul id="list" class="touch" data-role="listview" data-split-icon="delete" data-split-theme="d">
+
+			<li>
+				<a rel="external" href="/public/app/cihezh/1211/1.jsp">
+					<h3>2013健博会系列健康服务活动内容精彩  促进全民健康水平提升</h3>
+					<p>2013中国（深圳）国际健康产业博览会在12月11日在深圳会展中心举办</p>
+				</a>
+			</li>
 			
+			<li>
+				<a rel="external" href="/public/app/cihezh/1211/2.jsp">
+					<h3>12月11日健博会深度报道</h3>
+					<p>深圳特区报A92013</p>
+				</a>
+			</li>
+
+			<li>
+				<a rel="external" href="/public/app/cihezh/1211/3.jsp">
+					<h3>医养健康业转型 社会资本发力“抢筹”</h3>
+					<p>2013(第二届)中国医养健康产业国际投融资与建设高峰论坛在深圳胜利召开</p>
+				</a>
+			</li>
+
+			<li>
+				<a rel="external" href="/public/app/cihezh/1211/4.jsp">
+					<h3>健博会今天启幕</h3>
+					<p>2013中国（深圳）国际健康产业博览会启幕</p>
+				</a>
+			</li>
+		
 			<li>
 				<a rel="external" href="/public/app/cihezh/czzn.jsp">
 					<h3>组委会最新参展指南</h3>

@@ -73,4 +73,10 @@ public class CihezhController {
 		//System.out.println("展会亮点");
 		return "wechat/app/cihezh/zhld";
 	}
+	
+	@RequestMapping(value = { "/zhxw" }, method = RequestMethod.GET)
+	public String zhxw(WebRequest request) {
+		//System.out.println("展会新闻");
+		return "wechat/app/cihezh/zhxw";
+	}
 }

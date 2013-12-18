@@ -61,19 +61,16 @@ public class MenuManager {
 		btn12.setUrl("http://219.134.186.37/wechat/app/cihezh/zhld");
 		
 		ViewButton btn13 = new ViewButton();
-		btn13.setName("会议议程");
+		btn13.setName("展会新闻");
 		btn13.setType("view");
-		btn13.setUrl("http://219.134.186.37/wechat/app/cihezh/hyyc");
+		btn13.setUrl("http://219.134.186.37/wechat/app/cihezh/zhxw");
 		
 		ViewButton btn14 = new ViewButton();
 		btn14.setName("展会平面图");
 		btn14.setType("view");
 		btn14.setUrl("http://219.134.186.37/public/app/cihezh/zhpmt.jsp");
 		
-		ViewButton btn15 = new ViewButton();
-		btn15.setName("参展商报名");
-		btn15.setType("view");
-		btn15.setUrl("http://219.134.186.37/wechat/app/cihezh/canzhanshang/create");
+
 		
 		ViewButton btn21 = new ViewButton();
 		btn21.setName("首席赞助");
@@ -113,7 +110,7 @@ public class MenuManager {
 		ComplexButton mainBtn1 = new ComplexButton();
 		mainBtn1.setName("展会介绍");
 		mainBtn1
-				.setSub_button(new Button[] { btn11, btn12, btn13, btn14, btn15});		
+				.setSub_button(new Button[] { btn11, btn12, btn13, btn14});		
 		
 		ComplexButton mainBtn2 = new ComplexButton();
 		mainBtn2.setName("展会赞助");
