@@ -1,5 +1,12 @@
 package com.fcloud.util.scanning;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -14,12 +21,7 @@ import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.SystemPropertyUtils;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import com.fcloud.util.WebContext;
 
 // TODO 待重构为更通用扫描工具
 /**
@@ -89,6 +91,9 @@ public class ClassPathScanningClassesExecutor {
                             ClassUtils.getDefaultClassLoader()));
                 }
             }
+            
+            // fix
+            WebContext.read();
         }
         catch (ClassNotFoundException ex) {
             throw new RuntimeException("Class load failure classpath scanning", ex);
