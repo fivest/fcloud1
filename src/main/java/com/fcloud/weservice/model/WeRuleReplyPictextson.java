@@ -136,7 +136,7 @@ public class WeRuleReplyPictextson extends Entity {
 	/**
 	 * 相关多图文
 	 */
-    @DatabaseField(columnName = "fd_werulereply",foreign = true)
+    @DatabaseField(columnName = "fd_werulereply",foreign = true, foreignAutoRefresh = true)
 	protected WeRuleReplyPictexts fdWerulereply;
 
 	/**

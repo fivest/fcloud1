@@ -1,6 +1,7 @@
 package com.fcloud.weservice.model;
 
 import com.fcloud.core.model.Entity;
+import com.fcloud.wechat.user.model.User;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -293,5 +294,16 @@ public class WePublic extends Entity {
      */
     public void setFdCreatetime(Date fdCreatetime) {
         this.fdCreatetime = fdCreatetime;
+    }
+
+    @DatabaseField(columnName = "user",foreign = true)
+    protected User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

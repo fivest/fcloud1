@@ -1,7 +1,9 @@
 package com.fcloud.weservice.model;
 
 import com.fcloud.core.model.Entity;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
@@ -133,4 +135,13 @@ public class WeRuleReplyPictexts extends Entity {
 		this.fdWerulereply = fdWerulereply;
 	}
 
+    /**
+     * 子图文
+     */
+    @ForeignCollectionField
+    private ForeignCollection<WeRuleReplyPictextson> weRuleReplyPictextsons;
+
+    public ForeignCollection<WeRuleReplyPictextson> getWeRuleReplyPictextsons() {
+        return weRuleReplyPictextsons;
+    }
 }

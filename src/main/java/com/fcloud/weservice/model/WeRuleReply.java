@@ -107,7 +107,7 @@ public class WeRuleReply extends Entity {
 	}
 
 	/**
-	 * @param fdWepublic 相关公众号
+	 * @param fdWepublic 相关公众号 
 	 */
 	public void setFdWepublic(WePublic fdWepublic) {
 		this.fdWepublic = fdWepublic;

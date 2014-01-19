@@ -94,4 +94,14 @@ public class WeRuleReplyDefault extends Entity {
 		this.fdWepublic = fdWepublic;
 	}
 
+    @DatabaseField(columnName = "fd_type")
+    protected Integer fdType;
+
+    public Integer getFdType() {
+        return fdType;
+    }
+
+    public void setFdType(Integer fdType) {
+        this.fdType = fdType;
+    }
 }
