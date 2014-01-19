@@ -94,6 +94,12 @@
 <div class="ui-layout-north ui-widget-content" style="display: none;overflow:hidden;">
 	<div id="switcher" style="float: right; margin-right: 60px;"></div>
 	FCloud System
+    <div id="wepublic_div" style="float: right; margin-right: 90px;">
+        公众号：
+        <select id="wepublic">
+
+        </select>
+    </div>
 </div>
 
 <div class="ui-layout-south ui-widget-content" style="text-align:center; display: none;">© 2013 FCloud版权所有</div>
@@ -111,6 +117,17 @@
 
 <div class="ui-layout-west" style="display: none;">
 	<div id="tree1" class="basic">
+
+            <h3><a href="#">公众号设置</a></h3>
+            <div>
+                <div class="dd-nav" style="padding: 4px 3px 4px 1px;">
+                    <dd id="wepublic" onclick="javascript:openCenterIframe(this,'/weservice/we_public');"><a href="#">公众号</a></dd>
+
+                    <dd id="default" onclick="javascript:openCenterIframe(this,'/weservice/we_rule_reply_default/create');"><a href="#">默认配置</a></dd>
+                    <dd id="rule" onclick="javascript:openCenterIframe(this,'/weservice/we_rule_reply/create');"><a href="#">自定义配置</a></dd>
+
+                </div>
+            </div>
 
 			<h3><a href="#">DEMO1</a></h3>
 			<div>
@@ -141,7 +158,53 @@
 
 	</div>
 </div>
-
+<script>
+    $(function(){
+        //初始化公众号
+        $.ajax({
+            type: "GET",
+            url: "<%=request.getContextPath()%>/weservice/we_public/getWePublic",
+            dataType: "json",
+            success: function(data) {
+                $.each(data,
+                        function(i, item) {
+                            $("#wepublic").append("<option value=" + item.publicId + " >" + item.publicName + "</option>");
+                });
+                if(data.length>0){
+                    //为第一个option赋值&input
+                    $("#wepublic").val(data[0].publicId);
+                    //$("#_wpublicId option:first").attr("selected",true);
+                    setWepublicToSession();
+                }
+            }
+        })
+    });
+    $(function(){
+       $("#wepublic").change(function(){
+           setWepublicToSession();
+           $("#centerIframe").attr("src", $("#centerIframe").attr("src"));
+       })
+    });
+    function setWepublicToSession(){
+        var wepublicid = $("#wepublic").val();
+        $.ajax({
+            type: "GET",
+            url: "<%=request.getContextPath()%>/weservice/we_public/setPublicInSession",
+            data:{wepublicid:wepublicid},
+            dataType: "json",
+            timeStamp: new Date().getTime(),
+            cache: false,
+            success: function(data) {
+                showResult(data.result);
+            }
+        })
+    }
+    function showResult(responseText){
+        if(responseText!='success'){
+            alert("当前公众账号保存session失败.");
+        }
+    }
+</script>
 
 
 
