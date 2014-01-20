@@ -121,10 +121,10 @@
             <h3><a href="#">公众号设置</a></h3>
             <div>
                 <div class="dd-nav" style="padding: 4px 3px 4px 1px;">
-                    <dd id="wepublic" onclick="javascript:openCenterIframe(this,'/weservice/we_public');"><a href="#">公众号</a></dd>
+                    <dd id="wepublic" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/weservice/we_public');"><a href="#">公众号</a></dd>
 
-                    <dd id="default" onclick="javascript:openCenterIframe(this,'/weservice/we_rule_reply_default/create');"><a href="#">默认配置</a></dd>
-                    <dd id="rule" onclick="javascript:openCenterIframe(this,'/weservice/we_rule_reply/create');"><a href="#">自定义配置</a></dd>
+                    <dd id="default" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/weservice/we_rule_reply_default/create');"><a href="#">默认配置</a></dd>
+                    <dd id="rule" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/weservice/we_rule_reply/create');"><a href="#">自定义配置</a></dd>
 
                 </div>
             </div>
