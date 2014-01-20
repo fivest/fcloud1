@@ -37,4 +37,13 @@ public class WeRuleReplyPictextsRepository extends SimpleRepository<WeRuleReplyP
             delete(ruleReplyPictexts);
         }
     }
+    
+    public WeRuleReplyPictexts findRuleId(String ruleId) throws SQLException {
+    	WeRuleReplyPictexts ruleReplyPictexts = null;
+        List<WeRuleReplyPictexts> ruleReplyTexts = getDao().queryBuilder().where().eq("fd_werulereply", ruleId).query();
+        if (ruleReplyTexts != null && ruleReplyTexts.size() > 0) {
+            ruleReplyPictexts = ruleReplyTexts.get(0);    
+        }
+        return ruleReplyPictexts;
+    }
 }

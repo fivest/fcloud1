@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,21 +37,16 @@ import java.util.List;
 @RequestMapping("/weservice/we_public")
 public class WePublicController extends ActionController<WePublic,WePublicRepository> {
 
-    @Resource
-    private UserRepository userRepository;
-
     @Override
     public ModelAndView create(WebRequest request) {
         WePublic model = createModel();
         model.setFdIntToken(IdGenerator.newId());
+        model.setFdIntUrl("/api/message/"+model.getId());
         return render("edit", model);
     }
 
     @Override
     public ModelAndView save(@ModelAttribute WePublic model, WebRequest request, BindingResult result) {
-        String userId = SessionUser.get().getUserid();
-        User user = userRepository.findOne(userId);
-        model.setUser(user);
         return super.save(model, request, result);
     }
 

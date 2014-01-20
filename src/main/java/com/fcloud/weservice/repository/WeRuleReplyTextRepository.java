@@ -26,4 +26,13 @@ public class WeRuleReplyTextRepository extends SimpleRepository<WeRuleReplyText>
             delete(ruleReplyText);
         }
     }
+    
+    public WeRuleReplyText findByRuleId(String ruleId) throws SQLException {
+    	WeRuleReplyText ruleReplyText = null;
+        List<WeRuleReplyText> ruleReplyTexts = getDao().queryBuilder().where().eq("fd_werulereply", ruleId).query();
+        if (ruleReplyTexts != null && ruleReplyTexts.size() > 0) {
+            ruleReplyText = ruleReplyTexts.get(0);
+        }
+        return ruleReplyText;
+    }
 }
