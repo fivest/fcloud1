@@ -52,7 +52,7 @@
             </tr>
             <tr>
                 <td>接口URL:</td>
-                <td><form:input path="fdIntUrl"/></td>
+                <td><form:input path="fdIntUrl" readonly="true"/></td>
             </tr>
             <tr>
                 <td>Token:</td>
