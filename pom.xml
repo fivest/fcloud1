@@ -80,7 +80,6 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
-            <scope>provided</scope>
         </dependency>
         
 		<dependency>    
@@ -112,7 +111,7 @@
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
             <version>${jstl.version}</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <!-- 百度 BAE 参考，本地不使用
@@ -169,6 +168,27 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk15</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.5</version>
+        </dependency>
+
+
     </dependencies>
     
     
@@ -246,7 +266,7 @@
     
     
     
-  <!--   -->
+  <!-- -->
     <build>
         <finalName>fcloud-core</finalName>
 
@@ -267,4 +287,5 @@
             </plugin>
         </plugins>
     </build>
+   
 </project>
