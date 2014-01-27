@@ -277,9 +277,10 @@
                 <version>6.1.26</version>
                 <configuration>
                     <contextPath>/</contextPath>
+                    <webDefaultXml>webdefault.xml</webDefaultXml>
                     <connectors>
                         <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                            <port>9999</port>
+                            <port>80</port>
                         </connector>
                     </connectors>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
