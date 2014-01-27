@@ -25,7 +25,7 @@
                                 <tr>
                                     <td class="replay_td" style="width: 9%">
                                         <label class="frm_label">回复内容：</label>
-                                        <form:hidden path="fdWerulereply.id" ></form:hidden>
+                                        <input type="hidden" id="ruleReplyId" name="ruleReplyId" value="${requestScope.ruleReplyId}"/>
                                     </td>
                                     <td class="replay_td" style="width: 60%">
                                         <span class="frm_textarea_box"><form:textarea class="js_desc frm_textarea" path="fdText"></form:textarea></span>

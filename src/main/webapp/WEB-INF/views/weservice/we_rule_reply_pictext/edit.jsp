@@ -18,9 +18,9 @@
 编辑界面
 <body class="zh_cn">
 <form:form action="/weservice/we_rule_reply_pictext/save" method="POST"
-           commandName="model">
+           commandName="model" enctype="multipart/form-data">
     <form:hidden path="id"/>
-    <form:hidden path="fdWerulereply.id"/>
+    <input type="hidden" id="ruleReplyId" name="ruleReplyId" value="${requestScope.ruleReplyId}"/>
     <input type="hidden" id="picitems" name="picitems" value=""/>
     <div class="body page_appmsg_edit" id="body">
         <div class="container_box side_l" id="js_container_box">
@@ -49,7 +49,8 @@
     </script>
     <%--<script type="text/javascript" src="/public/js/list/wx19e425.js"></script>--%>
     <script type="text/javascript" src="/public/js/seajs/sea.js"></script>
-    <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/pic/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/public/js/pic/ajaxfileupload.js"></script>
     <script type="text/javascript" src="/public/js/pic/template.js"></script>
     <script type="text/javascript" src="/public/js/pic/wx.js"></script>
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>

@@ -18,7 +18,7 @@
 <form:form action="/weservice/we_rule_reply_pictexts/save" method="POST"
            commandName="model">
     <form:hidden path="id"/>
-    <form:hidden path="fdWerulereply.id"/>
+    <input type="hidden" id="ruleReplyId" name="ruleReplyId" value="${requestScope.ruleReplyId}"/>
     <input type="hidden" id="picitems" name="picitems" value=""/>
     <div id="body" class="body page_appmsg_edit">
         <div id="js_container_box" class="container_box side_l">
@@ -53,7 +53,8 @@
         };
     </script>
     <script type="text/javascript" src="/public/js/seajs/sea.js"></script>
-        <script type="text/javascript" src="/public/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/pic/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/public/js/pic/ajaxfileupload.js"></script>
         <script type="text/javascript" src="/public/js/pic/template.js"></script>
         <script type="text/javascript" src="/public/js/pic/wx.js"></script>
         <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
