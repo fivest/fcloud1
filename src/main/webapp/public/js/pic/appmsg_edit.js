@@ -777,7 +777,42 @@ S=e("public/js/pic/small_appmsg.html.js");
                 e.isMul ? ($(".js_addDesc", t).hide(), $(".js_desc_area", t).hide()) : $(".js_addDesc", t).show().click(function () {
                     $(this).hide(), $(".js_desc_area", t).show();
                 }), $(".js_removeCover", t).click(function () {
-                    $(".js_cover", t).data("file_id", !1).hide().find("img").remove(), e.nowitem$ && e.nowitem$.removeClass("has_thumb");
+                	var file_id = $(".js_cover", t).data("file_id");
+                	$.ajax({
+                        type: "POST",
+                        url: "/sys/att/deleteById",
+                        data: {fileId:file_id},
+                        dataType: "json",
+                        success: function (data) {
+                            $(".js_cover", t).data("file_id", !1).hide().find("img").remove(), e.nowitem$ && e.nowitem$.removeClass("has_thumb");
+                        },
+                        error: function (data) {
+
+                        }})
+                }),$("#js_appmsg_upload_cover",t).click(function(){
+                	$("#uploadPic",t).click();
+                	
+                }),$(t).on("change","#uploadPic",function(){
+            		var file_id = $(".js_cover", t).data("file_id");
+            		$(".js_cover", t).data("file_id", !1).hide().find("img").remove(), e.nowitem$ && e.nowitem$.removeClass("has_thumb");
+                	$.ajaxFileUpload({  
+                        //处理文件上传操作的服务器端地址(可以传参数,已亲测可用) 
+                        url:'/sys/att/fileUpload',  
+                        secureuri:false,                           //是否启用安全提交,默认为false   
+                        fileElementId:'uploadPic', 
+                        data:{fileId:file_id},//文件选择框的id属性  
+                        dataType:'json',                           //服务器返回的格式,可以是json或xml等  
+                        success:function(data, status){            //服务器响应成功时的处理函数 
+                        	var picUrl = data.picUrl;
+                        	$(".js_cover", t).find("img").remove(), $(".js_cover", t).show().prepend('<img src="%s">'.sprintf(picUrl)).data("file_id", data.attId), !e.nowitem$ || (e.nowitem$.find("img.js_appmsg_thumb").attr("src", picUrl), e.nowitem$.addClass("has_thumb"));
+                        	$("#uploadPic",t).replaceWith('<input type="file" name="fdPic" id="uploadPic"/>'); 
+                        },  
+                        error:function(data, status, e){ //服务器响应失败时的处理函数  
+                            //$('#result').html('图片上传失败，请重试！！');  
+                        	p.err("图片上传失败，请重试");
+                        }  
+                    });  
+                	
                 });
                 if (s == 10) {
                     var n = new baidu.editor.ui.Editor({
@@ -810,7 +845,7 @@ S=e("public/js/pic/small_appmsg.html.js");
                 var t = this, n = t.editor$;
                 n.find(".js_cover_tip").html(e.isFirst ? "大图片建议尺寸：360像素 * 200像素" : "小图片建议尺寸：200像素 * 200像素"), $(".js_title", n).val(e.title), $(".js_author", n).val(e.author), $(".js_cover", n).find("img").remove();
                 if (!e.file_id) $(".js_cover", n).data("file_id", !1).hide(); else {
-                    var r = wx.url("/cgi-bin/getimgdata?mode=large&source=file&fileId=%s>".sprintf(e.file_id));
+                    var r = e.cover;
                     $(".js_cover", n).show().prepend('<img src="%s">'.sprintf(r)).data("file_id", e.file_id);
                 }
                 $(".js_desc", n).val(e.digest), !t.isMul && s == 10 && (e.digest ? ($(".js_addDesc", n).hide(), $(".js_desc_area", n).show()) : ($(".js_addDesc", n).show(), $(".js_desc_area", n).hide())), s == 10 ? $(".js_url", n).val(e.source_url || "") : $(".js_url", n).val(e.content_url || ""), !e.source_url && s == 10 ? ($(".js_addURL", n).show(), $(".js_url_area", n).hide()) : ($(".js_addURL", n).hide(), $(".js_url_area", n).show()), s == 10 && t._setEditorContent(e.content);
@@ -890,7 +925,7 @@ S=e("public/js/pic/small_appmsg.html.js");
                 return !0;
             },
             _initData: function (e) {
-                return !e.file_id || (e.cover = wx.url("/cgi-bin/getimgdata?mode=large&source=file&fileId=%s".sprintf(e.file_id))), $.extend({
+                return !e.file_id || (e.cover), $.extend({
                     author: "",
                     file_id: "",
                     content: "",
