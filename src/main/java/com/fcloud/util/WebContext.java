@@ -5,7 +5,7 @@ package com.fcloud.util;
 
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
-import com.fcloud.util.crypto.LicenseUtils;
+//import com.fcloud.util.crypto.LicenseUtils;
 
 /**
  * @author ruben
@@ -20,6 +20,6 @@ public class WebContext extends XmlWebApplicationContext {
 	}
 	
 	public static void read() {
-		new LicenseUtils().doRead();
+	//	new LicenseUtils().doRead();
 	}
 }

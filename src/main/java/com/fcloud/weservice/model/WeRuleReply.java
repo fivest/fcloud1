@@ -112,5 +112,16 @@ public class WeRuleReply extends Entity {
 	public void setFdWepublic(WePublic fdWepublic) {
 		this.fdWepublic = fdWepublic;
 	}
+	
+	@DatabaseField(columnName = "fd_material")
+	protected String fdMaterial;
+
+	public String getFdMaterial() {
+		return fdMaterial;
+	}
+
+	public void setFdMaterial(String fdMaterial) {
+		this.fdMaterial = fdMaterial;
+	}
 
 }

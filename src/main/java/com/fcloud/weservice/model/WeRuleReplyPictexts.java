@@ -115,30 +115,10 @@ public class WeRuleReplyPictexts extends Entity {
 		this.fdTags = fdTags;
 	}
 
-	/**
-	 * 相关规则
-	 */
-    @DatabaseField(columnName = "fd_werulereply",foreign = true)
-	protected WeRuleReply fdWerulereply;
-
-	/**
-	 * @return 相关规则
-	 */
-	public WeRuleReply getFdWerulereply() {
-		return fdWerulereply;
-	}
-
-	/**
-	 * @param fdWerulereply 相关规则
-	 */
-	public void setFdWerulereply(WeRuleReply fdWerulereply) {
-		this.fdWerulereply = fdWerulereply;
-	}
-
     /**
      * 子图文
      */
-    @ForeignCollectionField
+    @ForeignCollectionField(orderColumnName="id",orderAscending=true)
     private ForeignCollection<WeRuleReplyPictextson> weRuleReplyPictextsons;
 
     public ForeignCollection<WeRuleReplyPictextson> getWeRuleReplyPictextsons() {

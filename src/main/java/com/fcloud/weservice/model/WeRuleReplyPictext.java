@@ -132,25 +132,16 @@ public class WeRuleReplyPictext extends Entity {
 	public void setFdTags(String fdTags) {
 		this.fdTags = fdTags;
 	}
+	
+	@DatabaseField(columnName = "att_id")
+	protected String attId;
 
-	/**
-	 * 相关规则
-	 */
-    @DatabaseField(columnName = "fd_werulereply",foreign = true)
-	protected WeRuleReply fdWerulereply;
-
-	/**
-	 * @return 相关规则
-	 */
-	public WeRuleReply getFdWerulereply() {
-		return fdWerulereply;
+	public String getAttId() {
+		return attId;
 	}
 
-	/**
-	 * @param fdWerulereply 相关规则
-	 */
-	public void setFdWerulereply(WeRuleReply fdWerulereply) {
-		this.fdWerulereply = fdWerulereply;
+	public void setAttId(String attId) {
+		this.attId = attId;
 	}
 
 }

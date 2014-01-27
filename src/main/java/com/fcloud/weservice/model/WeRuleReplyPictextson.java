@@ -153,4 +153,15 @@ public class WeRuleReplyPictextson extends Entity {
 		this.fdWerulereply = fdWerulereply;
 	}
 
+
+	@DatabaseField(columnName = "att_id")
+	protected String attId;
+
+	public String getAttId() {
+		return attId;
+	}
+
+	public void setAttId(String attId) {
+		this.attId = attId;
+	}
 }

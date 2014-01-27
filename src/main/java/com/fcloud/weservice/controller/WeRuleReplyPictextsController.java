@@ -2,7 +2,10 @@ package com.fcloud.weservice.controller;
 
 import com.fcloud.core.controller.ActionController;
 import com.fcloud.core.model.Entity;
+import com.fcloud.sys.att.model.SysAtt;
+import com.fcloud.sys.att.repository.SysAttRepository;
 import com.fcloud.util.IdGenerator;
+import com.fcloud.util.StringUtil;
 import com.fcloud.weservice.model.WeRuleReply;
 import com.fcloud.weservice.model.WeRuleReplyPictext;
 import com.fcloud.weservice.model.WeRuleReplyPictexts;
@@ -30,130 +33,167 @@ import java.util.List;
 
 /**
  * 多图文回复
- *
+ * 
  * @author
  * @version 1.0 2013-11-12
  */
 @Controller
 @RequestMapping("/weservice/we_rule_reply_pictexts")
-public class WeRuleReplyPictextsController extends ActionController<WeRuleReplyPictexts, WeRuleReplyPictextsRepository> {
+public class WeRuleReplyPictextsController extends
+		ActionController<WeRuleReplyPictexts, WeRuleReplyPictextsRepository> {
 
-    @Resource
-    private WeRuleReplyRepository weRuleReplyRepository;
+	@Resource
+	private WeRuleReplyRepository weRuleReplyRepository;
 
-    @Resource
-    private WeRuleReplyPictextsonRepository weRuleReplyPictextsonRepository;
+	@Resource
+	private WeRuleReplyPictextsonRepository weRuleReplyPictextsonRepository;
+	
+	@Resource
+	private SysAttRepository sysAttRepository;
 
-    @RequestMapping("/add")
-    @Transactional
-    public ModelAndView create(HttpServletRequest request, HttpServletResponse response) {
-        WeRuleReplyPictexts model = null;
-        String fdRuleId = request.getParameter("ruleId");
-        WeRuleReply ruleReply = weRuleReplyRepository.findOne(fdRuleId);
-        if (!StringUtils.isEmpty(fdRuleId)) {
-            try {
-                List<WeRuleReplyPictexts> ruleReplyTexts = getRepository().getDao().queryBuilder().where().eq("fd_werulereply", fdRuleId).query();
-                JSONObject infos = new JSONObject();
-                if (ruleReplyTexts != null && ruleReplyTexts.size() > 0) {
-                    model = ruleReplyTexts.get(0);
-                    //获取子图文
-                    ForeignCollection<WeRuleReplyPictextson> pictextsons = model.getWeRuleReplyPictextsons();
-                    if(pictextsons != null && !pictextsons.isEmpty()){
-                        infos = setPicJson(pictextsons);
-                    }
-                } else {
-                    model = createModel();
-                }
-                model.setFdWerulereply(ruleReply);
-                request.setAttribute("infos",infos);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return render("edit", model);
-    }
+	@RequestMapping("/add")
+	@Transactional
+	public ModelAndView create(HttpServletRequest request,
+			HttpServletResponse response) {
+		WeRuleReplyPictexts model = null;
+		String fdRuleId = request.getParameter("ruleId");
+		JSONObject infos = new JSONObject();
+		try {
+			if (!StringUtils.isEmpty(fdRuleId)) {
+				WeRuleReply ruleReply = weRuleReplyRepository.findOne(fdRuleId);
+				model = getRepository().findOne(ruleReply.getFdMaterial());
+				if (model != null) {
+					// 获取子图文
+					ForeignCollection<WeRuleReplyPictextson> pictextsons = model
+							.getWeRuleReplyPictextsons();
+					if (pictextsons != null && !pictextsons.isEmpty()) {
+						String pathUrl = request.getLocalAddr();
+						if(request.getLocalPort() != 80){
+							pathUrl = StringUtil.linkString(pathUrl, ":", String.valueOf(request.getLocalPort()));
+						}
+						pathUrl = StringUtil.linkString(pathUrl, "/", request.getContextPath());
+						infos = setPicJson(pictextsons,pathUrl);
+					}
+				} else {
+					model = createModel();
+				}
+				request.setAttribute("ruleReplyId", ruleReply.getId());
+				request.setAttribute("infos", infos);
 
-    @RequestMapping("/save")
-    @Transactional
-    public ModelAndView save(HttpServletRequest request, HttpServletResponse response) {
-        String fdId = request.getParameter("id");
-        String picitems = request.getParameter("picitems");
-        String ruleId = request.getParameter("fdWerulereply.id");
-        WeRuleReply ruleReply = weRuleReplyRepository.findOne(ruleId);
-        if (ruleReply != null) {
-            try {
-                WeRuleReplyPictexts ruleReplyText = getRepository().findOne(fdId);
-                if (ruleReplyText == null) {
-                    ruleReplyText = createModel();
-                    ruleReplyText.setId(fdId);
-                }
-                //设置规则
-                ruleReplyText.setFdWerulereply(ruleReply);
-                getRepository().save(ruleReplyText);
-                //设置子图文内容
-                saveChildPic(picitems, ruleReplyText);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return render("/public/success");
-    }
+			}else{
+				model = createModel();
+				request.setAttribute("infos", infos);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return render("edit", model);
+	}
 
-    @Transactional
-    private void saveChildPic(String picitems, WeRuleReplyPictexts ruleReplyText) throws SQLException {
-        //删除当前所有信息关联信息
-        List<WeRuleReplyPictextson> pictextsonList = weRuleReplyPictextsonRepository.getDao().queryBuilder().where().eq("fd_werulereply", ruleReplyText.getId()).query();
-        weRuleReplyPictextsonRepository.delete(pictextsonList);
-        if (!StringUtils.isEmpty(picitems)) {
-            JSONObject picitemsJson = JSONObject.fromObject(picitems);
-            int count = picitemsJson.getInt("count");
-            for (int i = 0; i < count; i++) {
-                WeRuleReplyPictextson pictextson = new WeRuleReplyPictextson();
-                pictextson.setId(IdGenerator.newId());
-                pictextson.setFdWerulereply(ruleReplyText);
-                pictextson.setFdOrder(i);
-                if (picitemsJson.containsKey("title" + i)) {
-                    pictextson.setFdTitle(picitemsJson.getString("title" + i));
-                }
-                if (picitemsJson.containsKey("content" + i)) {
-                    pictextson.setFdText(picitemsJson.getString("content" + i));
-                }
-                if (picitemsJson.containsKey("author" + i)) {
-                    pictextson.setFdTags(picitemsJson.getString("author" + i));
-                }
-                if (picitemsJson.containsKey("sourceurl" + i)) {
-                    pictextson.setFdUrl(picitemsJson.getString("sourceurl" + i));
-                }
-                //TODO 缺少附件
-                weRuleReplyPictextsonRepository.save(pictextson);
-            }
-        }
-    }
+	@RequestMapping("/save")
+	@Transactional
+	public ModelAndView save(HttpServletRequest request,
+			HttpServletResponse response) {
+		String fdId = request.getParameter("id");
+		String picitems = request.getParameter("picitems");
+		String ruleId = request.getParameter("ruleReplyId");
+		WeRuleReply ruleReply = weRuleReplyRepository.findOne(ruleId);
+		if (ruleReply != null) {
+			try {
+				WeRuleReplyPictexts ruleReplyText = getRepository().findOne(
+						fdId);
+				if (ruleReplyText == null) {
+					ruleReplyText = createModel();
+					ruleReplyText.setId(fdId);
+				}
+				getRepository().save(ruleReplyText);
+				// 设置子图文内容
+				saveChildPic(picitems, ruleReplyText);
 
-    private JSONObject setPicJson(ForeignCollection<WeRuleReplyPictextson> pictextsons) {
-        JSONArray multiitem = new JSONArray();
-        JSONObject firstobj = new JSONObject();
-        int i = 0;
-        for(WeRuleReplyPictextson pictextson : pictextsons){
-            JSONObject multiobj = new JSONObject();
-            multiobj.element("seq", i);
-            multiobj.element("title", pictextson.getFdTitle());
-            multiobj.element("show_cover_pic", 1);
-            multiobj.element("content", pictextson.getFdText());
-            multiobj.element("author",pictextson.getFdTags());
-            multiitem.add(multiobj);
-            if(i==0){
-                firstobj = JSONObject.fromObject(firstobj);
-            }
-        }
+				ruleReply.setFdMaterial(ruleReplyText.getId());
+				weRuleReplyRepository.save(ruleReply);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return render("/public/success");
+	}
 
-        firstobj.element("multi_item", multiitem);
-        JSONArray item = new JSONArray();
-        //multiobj.remove("show_cover_pic");
-        item.add(firstobj);
-        JSONObject infos = new JSONObject();
-        infos.element("item", item);
-        System.out.println(infos);
-        return infos;
-    }
+	@Transactional
+	private void saveChildPic(String picitems, WeRuleReplyPictexts ruleReplyText)
+			throws SQLException {
+		// 删除当前所有信息关联信息
+		List<WeRuleReplyPictextson> pictextsonList = weRuleReplyPictextsonRepository
+				.getDao().queryBuilder().where()
+				.eq("fd_werulereply", ruleReplyText.getId()).query();
+		weRuleReplyPictextsonRepository.delete(pictextsonList);
+		if (!StringUtils.isEmpty(picitems)) {
+			JSONObject picitemsJson = JSONObject.fromObject(picitems);
+			int count = picitemsJson.getInt("count");
+			for (int i = 0; i < count; i++) {
+				WeRuleReplyPictextson pictextson = new WeRuleReplyPictextson();
+				pictextson.setId(IdGenerator.newId());
+				pictextson.setFdWerulereply(ruleReplyText);
+				pictextson.setFdOrder(i);
+				if (picitemsJson.containsKey("title" + i)) {
+					pictextson.setFdTitle(picitemsJson.getString("title" + i));
+				}
+				if (picitemsJson.containsKey("content" + i)) {
+					pictextson.setFdText(picitemsJson.getString("content" + i));
+				}
+				if (picitemsJson.containsKey("author" + i)) {
+					pictextson.setFdTags(picitemsJson.getString("author" + i));
+				}
+				if (picitemsJson.containsKey("sourceurl" + i)) {
+					pictextson
+							.setFdUrl(picitemsJson.getString("sourceurl" + i));
+				}
+				if (picitemsJson.containsKey("fileid" + i)) {
+					pictextson.setAttId(picitemsJson.getString("fileid" + i));
+					SysAtt sysAtt = sysAttRepository.findOne(pictextson.getAttId());
+					if(sysAtt != null){
+						pictextson.setFdPic(sysAtt.getPicUrl());
+					}else{
+						pictextson.setAttId("");
+					}
+				
+				}
+				// TODO 缺少附件
+				weRuleReplyPictextsonRepository.save(pictextson);
+			}
+		}
+	}
+
+	private JSONObject setPicJson(
+			ForeignCollection<WeRuleReplyPictextson> pictextsons,String path) {
+		JSONArray multiitem = new JSONArray();
+		JSONObject firstobj = new JSONObject();
+		int i = 0;
+		for (WeRuleReplyPictextson pictextson : pictextsons) {
+			JSONObject multiobj = new JSONObject();
+			multiobj.element("seq", i);
+			multiobj.element("title", pictextson.getFdTitle());
+			multiobj.element("show_cover_pic", 1);
+			multiobj.element("content", pictextson.getFdText());
+			multiobj.element("author", pictextson.getFdTags());
+			if(!StringUtils.isEmpty(pictextson.getAttId())){
+				multiobj.element("file_id", pictextson.getAttId());
+				multiobj.element("cover", "http://"+path+"/upload"+pictextson.getFdPic());
+			}
+			multiobj.element("source_url", pictextson.getFdUrl());
+			multiitem.add(multiobj);
+			if (i == 0) {
+				firstobj = JSONObject.fromObject(firstobj);
+			}
+		}
+
+		firstobj.element("multi_item", multiitem);
+		JSONArray item = new JSONArray();
+		// multiobj.remove("show_cover_pic");
+		item.add(firstobj);
+		JSONObject infos = new JSONObject();
+		infos.element("item", item);
+		System.out.println(infos);
+		return infos;
+	}
 }

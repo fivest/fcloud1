@@ -1,6 +1,7 @@
 package com.fcloud.wemessage.controller;
 
 import com.fcloud.util.MessageUtils;
+import com.fcloud.util.StringUtil;
 import com.fcloud.wechat.basic.util.EncryptUtils;
 import com.fcloud.wemessage.messageType.ReqBaseMessage;
 import com.fcloud.wemessage.service.impl.LweChatService;
@@ -8,6 +9,7 @@ import com.fcloud.weservice.model.WePublic;
 import com.fcloud.weservice.repository.WePublicRepository;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Controller;
@@ -32,6 +34,8 @@ import java.util.Arrays;
 @RequestMapping("/api")
 public class CoreController implements ApplicationContextAware{
 	
+	@Value("#{fcloud['host']}")
+    private String host;
 	@Autowired
 	private ApplicationContext applicationContext;
 	
@@ -68,9 +72,14 @@ public class CoreController implements ApplicationContextAware{
 			
 			//通知
 			//applicationContext.publishEvent(new RequestEvent(rbMessage,this,id,request,response));
-			
+			String pathUrl = host;
+    		if(request.getLocalPort() != 80){
+    			pathUrl = StringUtil.linkString(pathUrl, ":", String.valueOf(request.getLocalPort()));
+    		}
+    		pathUrl = StringUtil.linkString(pathUrl, "/", request.getContextPath());
+    		pathUrl = pathUrl+"/upload";
 			// 调用核心业务类接收消息、处理消息
-			String respMessage = lweChatService.processRequest(rbMessage,id);
+			String respMessage = lweChatService.processRequest(rbMessage,id,pathUrl);
 			// 响应消息
 			PrintWriter out = response.getWriter();
 			out.print(respMessage);

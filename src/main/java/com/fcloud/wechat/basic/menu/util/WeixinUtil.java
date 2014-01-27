@@ -23,7 +23,7 @@ import com.fcloud.wechat.basic.menu.bean.Menu;
 
 /**
  * 公众平台通用接口工具类
- * 
+ *
  * @author 573
  * @date 2013-08-09
  */
@@ -32,7 +32,7 @@ public class WeixinUtil {
 	 private static Log log = LogFactory.getLog(WeixinUtil.class);
 	/**
 	 * 发起https请求并获取结果
-	 * 
+	 *
 	 * @param requestUrl
 	 *            请求地址
 	 * @param requestMethod
@@ -106,7 +106,7 @@ public class WeixinUtil {
 
 	/**
 	 * 获取access_token
-	 * 
+	 *
 	 * @param appid
 	 *            凭证
 	 * @param appsecret
@@ -140,7 +140,7 @@ public class WeixinUtil {
 
 	/**
 	 * 创建菜单
-	 * 
+	 *
 	 * @param menu
 	 *            菜单实例
 	 * @param accessToken

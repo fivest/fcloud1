@@ -33,24 +33,4 @@ public class WeRuleReplyText extends Entity {
 		this.fdText = fdText;
 	}
 
-	/**
-	 * 相关规则
-	 */
-    @DatabaseField(columnName = "fd_werulereply",foreign = true)
-	protected WeRuleReply fdWerulereply;
-
-	/**
-	 * @return 相关规则
-	 */
-	public WeRuleReply getFdWerulereply() {
-		return fdWerulereply;
-	}
-
-	/**
-	 * @param fdWerulereply 相关规则
-	 */
-	public void setFdWerulereply(WeRuleReply fdWerulereply) {
-		this.fdWerulereply = fdWerulereply;
-	}
-
 }

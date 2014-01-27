@@ -28,7 +28,7 @@ public class LweChatService {
      * @param pid
      * @return
      */
-	public String processRequest(ReqBaseMessage rbMessage,String pid) {
+	public String processRequest(ReqBaseMessage rbMessage,String pid,String rootPath) {
 		String respMessage = "";
 		try {
 			//id是公众号
@@ -37,7 +37,7 @@ public class LweChatService {
 				logger.error("===LweChatService error,该id无公众号记录===");
 				return null;
 			}
-			respMessage = wePublicRepository.sendMessage(wePublic, rbMessage);
+			respMessage = wePublicRepository.sendMessage(wePublic, rbMessage,rootPath);
 		} catch (Exception e) {
 			logger.error(e);
 		}
