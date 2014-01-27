@@ -128,6 +128,17 @@
 
                 </div>
             </div>
+            
+            <h3><a href="#">素材库设置</a></h3>
+            <div>
+                <div class="dd-nav" style="padding: 4px 3px 4px 1px;">
+                    <dd id="wepublic" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/weservice/we_rule_reply_text');"><a href="#">文本</a></dd>
+
+                    <dd id="default" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/weservice/we_rule_reply_default/create');"><a href="#">默认配置</a></dd>
+                    <dd id="rule" onclick="javascript:openCenterIframe(this,'<%=request.getContextPath()%>/weservice/we_rule_reply/create');"><a href="#">自定义配置</a></dd>
+
+                </div>
+            </div>
 
 			<h3><a href="#">DEMO1</a></h3>
 			<div>
