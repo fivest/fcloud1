@@ -8,6 +8,7 @@ import com.fcloud.weservice.model.WePublic;
 import com.fcloud.weservice.model.WeRuleReply;
 import com.fcloud.weservice.model.WeRuleReplyPictextson;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.table.DatabaseTable;
 import org.springframework.stereotype.Repository;
 
@@ -23,9 +24,19 @@ public class WeRuleReplyRepository extends SimpleRepository<WeRuleReply> {
     public WeRuleReply findByPublic(WePublic wePublic,String fdText){
     	WeRuleReply ruleReply = null;
     	try {
-        	List<WeRuleReply> replies = getDao().queryBuilder().where().eq("fd_wepublic", wePublic.getId()).and().like("fd_key", "%"+fdText+"%").query();
+        	List<WeRuleReply> replies = null;
+        	QueryBuilder queryBuilder = getDao().queryBuilder();
+        	queryBuilder.where().eq("fd_wepublic", wePublic.getId()).and().eq("fd_match_type", 2).and().eq("fd_key",fdText);
+        	queryBuilder.orderBy("id", true);
+        	replies = queryBuilder.query();
         	if(replies != null && !replies.isEmpty()){
         		ruleReply = replies.get(0);
+        	}else{
+        		queryBuilder.where().reset().eq("fd_wepublic", wePublic.getId()).and().eq("fd_match_type", 1).and().like("fd_key", "%"+fdText+"%");
+        		replies = queryBuilder.query();
+        		if(replies != null && !replies.isEmpty()){
+            		ruleReply = replies.get(0);
+            	}
         	}
 		} catch (Exception e) {
 			e.printStackTrace();

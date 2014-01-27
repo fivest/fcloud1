@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.fcloud.core.repository.support.SimpleRepository;
 import com.fcloud.util.MessageUtils;
 import com.fcloud.util.ObjectToXmlUtils;
+import com.fcloud.util.StringUtil;
 import com.fcloud.wechat.auth.model.SessionUser;
 import com.fcloud.wechat.user.model.User;
 import com.fcloud.wechat.user.repository.UserRepository;
@@ -24,6 +25,7 @@ import com.fcloud.wemessage.messageType.resp.GraphicMessage;
 import com.fcloud.wemessage.util.MessageConstant;
 import com.fcloud.weservice.model.WePublic;
 import com.fcloud.weservice.model.WeRuleReply;
+import com.fcloud.weservice.model.WeRuleReplyDefault;
 import com.fcloud.weservice.model.WeRuleReplyPictext;
 import com.fcloud.weservice.model.WeRuleReplyPictexts;
 import com.fcloud.weservice.model.WeRuleReplyPictextson;
@@ -58,6 +60,9 @@ public class WePublicRepository extends SimpleRepository<WePublic>{
     private WeRuleReplyPictextsonRepository weRuleReplyPictextsonRepository;
     
     @Resource
+    private WeRuleReplyDefaultRepository weRuleReplyDefaultRepository;
+    
+    @Resource
     private UserRepository userRepository;
 
     @Override
@@ -74,7 +79,7 @@ public class WePublicRepository extends SimpleRepository<WePublic>{
      * @return
      * @author：lizh
      */
-    public String sendMessage(WePublic wePublic,ReqBaseMessage rbMessage){
+    public String sendMessage(WePublic wePublic,ReqBaseMessage rbMessage,String rootPath){
         String mess = "";
         TextMessage textMessage = (TextMessage)rbMessage;
         try {
@@ -84,10 +89,12 @@ public class WePublicRepository extends SimpleRepository<WePublic>{
             	if("1".equals(ruleReply.getFdReplyType().toString())){
             		mess = getTextMsg(ruleReply,textMessage);
             	}else if("2".equals(ruleReply.getFdReplyType().toString())){
-            		mess = getPictextMsg(ruleReply,textMessage);
+            		mess = getPictextMsg(ruleReply,textMessage,rootPath);
             	}else{
-            		mess = getPictextsMsg(ruleReply,textMessage);
+            		mess = getPictextsMsg(ruleReply,textMessage,rootPath);
             	}
+            }else{
+            	WeRuleReplyDefault ruleReplyDefault = weRuleReplyDefaultRepository.findDefaultByPublic(wePublic);
             }
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,7 +120,7 @@ public class WePublicRepository extends SimpleRepository<WePublic>{
 	private String getTextMsg(WeRuleReply ruleReply,TextMessage textMessage){
 		String mess = "";
 		try {
-			WeRuleReplyText replyText =  weRuleReplyTextRepository.findByRuleId(ruleReply.getId());
+			WeRuleReplyText replyText =  weRuleReplyTextRepository.findOne(ruleReply.getFdMaterial());
 			if(replyText != null){
 				com.fcloud.wemessage.messageType.resp.TextMessage resp = new com.fcloud.wemessage.messageType.resp.TextMessage();
 				resp.setContent(replyText.getFdText());
@@ -129,16 +136,18 @@ public class WePublicRepository extends SimpleRepository<WePublic>{
 		return mess;
 	}
 
-	private String getPictextMsg(WeRuleReply ruleReply,TextMessage textMessage){
+	private String getPictextMsg(WeRuleReply ruleReply,TextMessage textMessage,String rootPath){
 		String mess = "";
 		List<Article> articleList = new ArrayList<Article>();  
 		try {
-			WeRuleReplyPictext replyPicText =  weRuleReplyPictextRepository.findByRuleId(ruleReply.getId());
+			WeRuleReplyPictext replyPicText =  weRuleReplyPictextRepository.findOne(ruleReply.getFdMaterial());
 			if(replyPicText != null){
 				Article article = new Article();  
                 article.setTitle(replyPicText.getFdTitle());  
                 article.setDescription(replyPicText.getFdSummary());  
-                article.setPicUrl(replyPicText.getFdPic());  
+                if(StringUtil.isNotNull(replyPicText.getFdPic())){
+                	article.setPicUrl(rootPath+replyPicText.getFdPic()); 
+                }
                 article.setUrl(replyPicText.getFdUrl());  
                 articleList.add(article);
                 GraphicMessage resp = new GraphicMessage();
@@ -157,17 +166,19 @@ public class WePublicRepository extends SimpleRepository<WePublic>{
 		return mess;	
 	}
 	
-	private String getPictextsMsg(WeRuleReply ruleReply,TextMessage textMessage){
+	private String getPictextsMsg(WeRuleReply ruleReply,TextMessage textMessage,String rootPath){
 		String mess = "";
 		List<Article> articleList = new ArrayList<Article>();  
 		try {
-			WeRuleReplyPictexts replyPicTexts =  weRuleReplyPictextsRepository.findRuleId(ruleReply.getId());
+			WeRuleReplyPictexts replyPicTexts =  weRuleReplyPictextsRepository.findOne(ruleReply.getFdMaterial());
 			if(replyPicTexts != null){
 				ForeignCollection<WeRuleReplyPictextson> weRuleReplyPictextsons = replyPicTexts.getWeRuleReplyPictextsons();
 				for(WeRuleReplyPictextson picTextson:weRuleReplyPictextsons){
 					Article article = new Article();  
 	                article.setTitle(picTextson.getFdTitle());
-	                article.setPicUrl(picTextson.getFdPic());  
+	                if(StringUtil.isNotNull(picTextson.getFdPic())){
+	                	article.setPicUrl(rootPath+picTextson.getFdPic()); 
+	                }
 	                article.setUrl(picTextson.getFdUrl());  
 	                articleList.add(article);
 				}
@@ -184,6 +195,23 @@ public class WePublicRepository extends SimpleRepository<WePublic>{
 			e.printStackTrace();
 		}
 		return mess;	
+	}
+	
+	private String getDefaultMsg(WeRuleReplyDefault ruleReplyDefault,TextMessage textMessage){
+		String mess = "";
+		String ruleType = ruleReplyDefault.getFdRuleType().toString();
+		if("1".equals(ruleType)){
+			com.fcloud.wemessage.messageType.resp.TextMessage resp = new com.fcloud.wemessage.messageType.resp.TextMessage();
+			resp.setContent(ruleReplyDefault.getFdRuleJson());
+			resp.setMsgType(textMessage.getMsgType());
+			resp.setToUserName(textMessage.getFromUserName());
+			resp.setFromUserName(textMessage.getToUserName());
+			resp.setCreateTime(new Date().getTime());
+			mess = ObjectToXmlUtils.textMessageToXml(resp);
+		}else{
+			
+		}
+		return mess;
 	}
 }
 
