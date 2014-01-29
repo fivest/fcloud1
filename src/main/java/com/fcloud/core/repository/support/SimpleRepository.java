@@ -208,4 +208,25 @@ public class SimpleRepository<T> implements OrmliteRepository<T>, SingleModelRep
             throw wrapException(e);
         }
     }
+    
+    //通过条件查询分页
+    public Page<T> readPageByBuilder(QueryBuilder<T, String> queryBuilder, Pageable pageable) {
+        try {
+            Long total = queryBuilder.countOf();
+            queryBuilder.setCountOf(false);
+
+            queryBuilder.offset((long) pageable.getOffset());
+            queryBuilder.limit((long) pageable.getPageSize());
+            Sort sort = pageable.getSort();
+            if (sort != null) {
+                for (Sort.Order order : sort) {
+                    queryBuilder.orderBy(order.getProperty(), order.isAscending());
+                }
+            }
+            List<T> list = queryBuilder.query();
+            return new PageImpl<T>(list, pageable, total);
+        } catch (SQLException e) {
+            throw wrapException(e);
+        }
+    }
 }
