@@ -32,5 +32,25 @@ public class WeRuleReplyText extends Entity {
 	public void setFdText(String fdText) {
 		this.fdText = fdText;
 	}
+	
+	/**
+	 * 相关公众号
+	 */
+    @DatabaseField(columnName = "fd_wepublic",foreign = true)
+	protected WePublic fdWepublic;
+
+	/**
+	 * @return 相关公众号
+	 */
+	public WePublic getFdWepublic() {
+		return fdWepublic;
+	}
+
+	/**
+	 * @param fdWepublic 相关公众号 
+	 */
+	public void setFdWepublic(WePublic fdWepublic) {
+		this.fdWepublic = fdWepublic;
+	}
 
 }

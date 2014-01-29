@@ -2,6 +2,8 @@ package com.fcloud.weservice.repository;
 
 import com.fcloud.core.model.Entity;
 import com.fcloud.core.repository.support.SimpleRepository;
+import com.fcloud.sys.att.repository.SysAttRepository;
+import com.fcloud.util.StringUtil;
 import com.fcloud.weservice.model.WeRuleReplyPictext;
 import com.fcloud.weservice.model.WeRuleReplyPictexts;
 import com.fcloud.weservice.model.WeRuleReplyPictextson;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 /**
  * 单图文回复
  *
@@ -22,6 +26,10 @@ import java.util.List;
  */
 @Repository
 public class WeRuleReplyPictextRepository extends SimpleRepository<WeRuleReplyPictext> {
+
+	@Resource
+	private SysAttRepository sysAttRepository;
+	
     public void deleteByRuleId(String ruleId) throws SQLException {
         List<WeRuleReplyPictext> ruleReplyTexts = getDao().queryBuilder().where().eq("fd_werulereply", ruleId).query();
         if (ruleReplyTexts != null && ruleReplyTexts.size() > 0) {
@@ -38,4 +46,17 @@ public class WeRuleReplyPictextRepository extends SimpleRepository<WeRuleReplyPi
         }
         return ruleReplyPictext;
     }
+
+	@Override
+	public void delete(WeRuleReplyPictext entity) {
+		if(StringUtil.isNotNull(entity.getAttId())){
+			try {
+				sysAttRepository.deleteByAttId(entity.getAttId());
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw wrapException(e);
+			}
+		}
+		super.delete(entity);
+	}
 }

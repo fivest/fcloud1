@@ -34,8 +34,8 @@ import java.util.Arrays;
 @RequestMapping("/api")
 public class CoreController implements ApplicationContextAware{
 	
-	@Value("#{fcloud['host']}")
-    private String host;
+	@Value("#{fcloud['fcloudhost']}")
+    private String fcloudhost;
 	@Autowired
 	private ApplicationContext applicationContext;
 	
@@ -72,7 +72,7 @@ public class CoreController implements ApplicationContextAware{
 			
 			//通知
 			//applicationContext.publishEvent(new RequestEvent(rbMessage,this,id,request,response));
-			String pathUrl = host;
+			String pathUrl = fcloudhost;
     		if(request.getLocalPort() != 80){
     			pathUrl = StringUtil.linkString(pathUrl, ":", String.valueOf(request.getLocalPort()));
     		}

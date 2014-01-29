@@ -29,12 +29,7 @@ public class WeRuleReplyPictextsRepository extends SimpleRepository<WeRuleReplyP
     public void deleteByRuleId(String ruleId) throws SQLException {
         List<WeRuleReplyPictexts> ruleReplyTexts = getDao().queryBuilder().where().eq("fd_werulereply", ruleId).query();
         if (ruleReplyTexts != null && ruleReplyTexts.size() > 0) {
-            WeRuleReplyPictexts ruleReplyPictexts = ruleReplyTexts.get(0);
-            ForeignCollection<WeRuleReplyPictextson> pictextsons = ruleReplyPictexts.getWeRuleReplyPictextsons();
-            for(WeRuleReplyPictextson pictextson : pictextsons){
-                weRuleReplyPictextsonRepository.delete(pictextson);
-            }
-            delete(ruleReplyPictexts);
+        	delete(ruleReplyTexts.get(0));
         }
     }
     
@@ -46,4 +41,14 @@ public class WeRuleReplyPictextsRepository extends SimpleRepository<WeRuleReplyP
         }
         return ruleReplyPictexts;
     }
+
+	@Override
+	public void delete(WeRuleReplyPictexts entity) {
+        ForeignCollection<WeRuleReplyPictextson> pictextsons = entity.getWeRuleReplyPictextsons();
+        for(WeRuleReplyPictextson pictextson : pictextsons){
+            weRuleReplyPictextsonRepository.delete(pictextson);
+        }
+		super.delete(entity);
+	}
+    
 }

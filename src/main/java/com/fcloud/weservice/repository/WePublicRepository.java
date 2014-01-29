@@ -33,77 +33,95 @@ import com.fcloud.weservice.model.WeRuleReplyText;
 import com.j256.ormlite.dao.ForeignCollection;
 
 /**
- * Created with IntelliJ IDEA.
- * User: zxpfss
- * Date: 13-11-19
- * Time: 下午11:05
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: zxpfss Date: 13-11-19 Time: 下午11:05 To
+ * change this template use File | Settings | File Templates.
  */
 @Repository
-public class WePublicRepository extends SimpleRepository<WePublic>{
-    private Logger logger = Logger.getLogger(WePublicRepository.class);
+public class WePublicRepository extends SimpleRepository<WePublic> {
+	private Logger logger = Logger.getLogger(WePublicRepository.class);
 
-    
-    @Resource
-    private WeRuleReplyRepository weRuleReplyRepository;
-    
-    @Resource
-    private WeRuleReplyTextRepository weRuleReplyTextRepository;
-    
-    @Resource
-    private WeRuleReplyPictextRepository weRuleReplyPictextRepository;
-    
-    @Resource
-    private WeRuleReplyPictextsRepository weRuleReplyPictextsRepository;
-    
-    @Resource
-    private WeRuleReplyPictextsonRepository weRuleReplyPictextsonRepository;
-    
-    @Resource
-    private WeRuleReplyDefaultRepository weRuleReplyDefaultRepository;
-    
-    @Resource
-    private UserRepository userRepository;
+	@Resource
+	private WeRuleReplyRepository weRuleReplyRepository;
 
-    @Override
+	@Resource
+	private WeRuleReplyTextRepository weRuleReplyTextRepository;
+
+	@Resource
+	private WeRuleReplyPictextRepository weRuleReplyPictextRepository;
+
+	@Resource
+	private WeRuleReplyPictextsRepository weRuleReplyPictextsRepository;
+
+	@Resource
+	private WeRuleReplyPictextsonRepository weRuleReplyPictextsonRepository;
+
+	@Resource
+	private WeRuleReplyDefaultRepository weRuleReplyDefaultRepository;
+
+	@Resource
+	private UserRepository userRepository;
+
+	@Override
 	public <S extends WePublic> S save(S entity) {
 
-        String userId = SessionUser.get().getUserid();
-        User user = userRepository.findOne(userId);
-        entity.setUser(user);
+		String userId = SessionUser.get().getUserid();
+		User user = userRepository.findOne(userId);
+		entity.setUser(user);
 		return super.save(entity);
 	}
 
 	/**
-     * 微信消息反馈
-     * @return
-     * @author：lizh
-     */
-    public String sendMessage(WePublic wePublic,ReqBaseMessage rbMessage,String rootPath){
-        String mess = "";
-        TextMessage textMessage = (TextMessage)rbMessage;
-        try {
-        	//根据公众号寻找需要执行的程序集
-            WeRuleReply ruleReply = weRuleReplyRepository.findByPublic(wePublic,textMessage.getContent());
-            if(ruleReply != null){
-            	if("1".equals(ruleReply.getFdReplyType().toString())){
-            		mess = getTextMsg(ruleReply,textMessage);
-            	}else if("2".equals(ruleReply.getFdReplyType().toString())){
-            		mess = getPictextMsg(ruleReply,textMessage,rootPath);
-            	}else{
-            		mess = getPictextsMsg(ruleReply,textMessage,rootPath);
-            	}
-            }else{
-            	WeRuleReplyDefault ruleReplyDefault = weRuleReplyDefaultRepository.findDefaultByPublic(wePublic);
-            }
+	 * 微信消息反馈
+	 * 
+	 * @return
+	 * @author：lizh
+	 */
+	public String sendMessage(WePublic wePublic, ReqBaseMessage rbMessage,
+			String rootPath) {
+		String mess = "";
+		TextMessage textMessage = (TextMessage) rbMessage;
+		try {
+			// 根据公众号寻找需要执行的程序集
+			WeRuleReply ruleReply = weRuleReplyRepository.findByPublic(
+					wePublic, textMessage.getContent());
+			// 自定义规则
+			if (ruleReply != null) {
+				if ("1".equals(ruleReply.getFdReplyType().toString())) {
+					mess = getTextMsg(ruleReply, textMessage);
+				} else if ("2".equals(ruleReply.getFdReplyType().toString())) {
+					mess = getPictextMsg(ruleReply, textMessage, rootPath);
+				} else {
+					mess = getPictextsMsg(ruleReply, textMessage, rootPath);
+				}
+			} else {// 默认规则
+				WeRuleReplyDefault ruleReplyDefault = weRuleReplyDefaultRepository
+						.findDefaultByPublic(wePublic);
+				if ("1".equals(ruleReplyDefault.getFdRuleType().toString())) {
+					if (StringUtil.isNotNull(ruleReplyDefault.getFdRuleJson())) {
+						mess = getTextMsg(ruleReplyDefault.getFdRuleJson(),
+								textMessage);
+					}
+				} else if ("2".equals(ruleReplyDefault.getFdRuleType()
+						.toString())) {
+					WeRuleReplyPictext pictext = weRuleReplyPictextRepository
+							.findOne(ruleReplyDefault.getFdRuleJson());
+					if (pictext != null) {
+						mess = getPictextMsg(pictext, textMessage, rootPath);
+					}
+				} else {
+					WeRuleReplyPictexts pictexts = weRuleReplyPictextsRepository
+							.findOne(ruleReplyDefault.getFdRuleJson());
+					mess = getPictextsMsg(pictexts, textMessage, rootPath);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        
-        return mess;
-    }
-    
-    /**
+
+		return mess;
+	}
+
+	/**
 	 * 将微信消息中的CreateTime转换成标准格式的时间（yyyy-MM-dd HH:mm:ss）
 	 * 
 	 * @param createTime
@@ -116,19 +134,15 @@ public class WePublicRepository extends SimpleRepository<WePublic>{
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return format.format(new Date(msgCreateTime));
 	}
-	
-	private String getTextMsg(WeRuleReply ruleReply,TextMessage textMessage){
+
+	// 获取自定义规则图文信息
+	private String getTextMsg(WeRuleReply ruleReply, TextMessage textMessage) {
 		String mess = "";
 		try {
-			WeRuleReplyText replyText =  weRuleReplyTextRepository.findOne(ruleReply.getFdMaterial());
-			if(replyText != null){
-				com.fcloud.wemessage.messageType.resp.TextMessage resp = new com.fcloud.wemessage.messageType.resp.TextMessage();
-				resp.setContent(replyText.getFdText());
-				resp.setMsgType(textMessage.getMsgType());
-				resp.setToUserName(textMessage.getFromUserName());
-				resp.setFromUserName(textMessage.getToUserName());
-				resp.setCreateTime(new Date().getTime());
-				mess = ObjectToXmlUtils.textMessageToXml(resp);
+			WeRuleReplyText replyText = weRuleReplyTextRepository
+					.findOne(ruleReply.getFdMaterial());
+			if (replyText != null) {
+				mess = getTextMsg(replyText.getFdText(), textMessage);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -136,71 +150,123 @@ public class WePublicRepository extends SimpleRepository<WePublic>{
 		return mess;
 	}
 
-	private String getPictextMsg(WeRuleReply ruleReply,TextMessage textMessage,String rootPath){
+	// 设置文本回复
+	private String getTextMsg(String text, TextMessage textMessage) {
 		String mess = "";
-		List<Article> articleList = new ArrayList<Article>();  
 		try {
-			WeRuleReplyPictext replyPicText =  weRuleReplyPictextRepository.findOne(ruleReply.getFdMaterial());
-			if(replyPicText != null){
-				Article article = new Article();  
-                article.setTitle(replyPicText.getFdTitle());  
-                article.setDescription(replyPicText.getFdSummary());  
-                if(StringUtil.isNotNull(replyPicText.getFdPic())){
-                	article.setPicUrl(rootPath+replyPicText.getFdPic()); 
-                }
-                article.setUrl(replyPicText.getFdUrl());  
-                articleList.add(article);
-                GraphicMessage resp = new GraphicMessage();
-                resp.setMsgType("news");
-				resp.setToUserName(textMessage.getFromUserName());
-				resp.setFromUserName(textMessage.getToUserName());
-				resp.setCreateTime(new Date().getTime());
-                resp.setArticleCount(articleList.size());
-                resp.setArticles(articleList);
-				mess = ObjectToXmlUtils.graphicMessage(resp);
+			com.fcloud.wemessage.messageType.resp.TextMessage resp = new com.fcloud.wemessage.messageType.resp.TextMessage();
+			resp.setContent(text);
+			resp.setMsgType(textMessage.getMsgType());
+			resp.setToUserName(textMessage.getFromUserName());
+			resp.setFromUserName(textMessage.getToUserName());
+			resp.setCreateTime(new Date().getTime());
+			mess = ObjectToXmlUtils.textMessageToXml(resp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mess;
+	}
+
+	// 获取单图文回复
+	private String getPictextMsg(WeRuleReply ruleReply,
+			TextMessage textMessage, String rootPath) {
+		String mess = "";
+		try {
+			WeRuleReplyPictext replyPicText = weRuleReplyPictextRepository
+					.findOne(ruleReply.getFdMaterial());
+			if (replyPicText != null) {
+				mess = getPictextMsg(replyPicText, textMessage, rootPath);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		System.out.println(mess);
-		return mess;	
+		return mess;
 	}
-	
-	private String getPictextsMsg(WeRuleReply ruleReply,TextMessage textMessage,String rootPath){
+
+	// 设置单图文信息
+	private String getPictextMsg(WeRuleReplyPictext replyPicText,
+			TextMessage textMessage, String rootPath) {
 		String mess = "";
-		List<Article> articleList = new ArrayList<Article>();  
+		List<Article> articleList = new ArrayList<Article>();
 		try {
-			WeRuleReplyPictexts replyPicTexts =  weRuleReplyPictextsRepository.findOne(ruleReply.getFdMaterial());
-			if(replyPicTexts != null){
-				ForeignCollection<WeRuleReplyPictextson> weRuleReplyPictextsons = replyPicTexts.getWeRuleReplyPictextsons();
-				for(WeRuleReplyPictextson picTextson:weRuleReplyPictextsons){
-					Article article = new Article();  
-	                article.setTitle(picTextson.getFdTitle());
-	                if(StringUtil.isNotNull(picTextson.getFdPic())){
-	                	article.setPicUrl(rootPath+picTextson.getFdPic()); 
-	                }
-	                article.setUrl(picTextson.getFdUrl());  
-	                articleList.add(article);
+			Article article = new Article();
+			article.setTitle(replyPicText.getFdTitle());
+			article.setDescription(replyPicText.getFdSummary());
+			if (StringUtil.isNotNull(replyPicText.getFdPic())) {
+				article.setPicUrl(rootPath + replyPicText.getFdPic());
+			}
+			article.setUrl(replyPicText.getFdUrl());
+			articleList.add(article);
+			GraphicMessage resp = new GraphicMessage();
+			resp.setMsgType("news");
+			resp.setToUserName(textMessage.getFromUserName());
+			resp.setFromUserName(textMessage.getToUserName());
+			resp.setCreateTime(new Date().getTime());
+			resp.setArticleCount(articleList.size());
+			resp.setArticles(articleList);
+			mess = ObjectToXmlUtils.graphicMessage(resp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(mess);
+		return mess;
+	}
+
+	// 获取多图文回复
+	private String getPictextsMsg(WeRuleReply ruleReply,
+			TextMessage textMessage, String rootPath) {
+		String mess = "";
+		try {
+			WeRuleReplyPictexts replyPicTexts = weRuleReplyPictextsRepository
+					.findOne(ruleReply.getFdMaterial());
+			if (replyPicTexts != null) {
+				mess = getPictextsMsg(replyPicTexts, textMessage, rootPath);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mess;
+	}
+
+	// 获取多图文回复
+	private String getPictextsMsg(WeRuleReplyPictexts replyPicTexts,
+			TextMessage textMessage, String rootPath) {
+		String mess = "";
+		List<Article> articleList = new ArrayList<Article>();
+		try {
+			if (replyPicTexts != null) {
+				ForeignCollection<WeRuleReplyPictextson> weRuleReplyPictextsons = replyPicTexts
+						.getWeRuleReplyPictextsons();
+				for (WeRuleReplyPictextson picTextson : weRuleReplyPictextsons) {
+					Article article = new Article();
+					article.setTitle(picTextson.getFdTitle());
+					if (StringUtil.isNotNull(picTextson.getFdPic())) {
+						article.setPicUrl(rootPath + picTextson.getFdPic());
+					}
+					article.setUrl(picTextson.getFdUrl());
+					articleList.add(article);
 				}
-                GraphicMessage resp = new GraphicMessage();
-                resp.setMsgType("news");
+				GraphicMessage resp = new GraphicMessage();
+				resp.setMsgType("news");
 				resp.setToUserName(textMessage.getFromUserName());
 				resp.setFromUserName(textMessage.getToUserName());
 				resp.setCreateTime(new Date().getTime());
-                resp.setArticleCount(articleList.size());
-                resp.setArticles(articleList);
+				resp.setArticleCount(articleList.size());
+				resp.setArticles(articleList);
 				mess = ObjectToXmlUtils.graphicMessage(resp);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return mess;	
+		return mess;
 	}
-	
-	private String getDefaultMsg(WeRuleReplyDefault ruleReplyDefault,TextMessage textMessage){
+
+	private String getDefaultMsg(WeRuleReplyDefault ruleReplyDefault,
+			TextMessage textMessage) {
 		String mess = "";
 		String ruleType = ruleReplyDefault.getFdRuleType().toString();
-		if("1".equals(ruleType)){
+		if ("1".equals(ruleType)) {
 			com.fcloud.wemessage.messageType.resp.TextMessage resp = new com.fcloud.wemessage.messageType.resp.TextMessage();
 			resp.setContent(ruleReplyDefault.getFdRuleJson());
 			resp.setMsgType(textMessage.getMsgType());
@@ -208,10 +274,9 @@ public class WePublicRepository extends SimpleRepository<WePublic>{
 			resp.setFromUserName(textMessage.getToUserName());
 			resp.setCreateTime(new Date().getTime());
 			mess = ObjectToXmlUtils.textMessageToXml(resp);
-		}else{
-			
+		} else {
+
 		}
 		return mess;
 	}
 }
-

@@ -1,10 +1,16 @@
 package com.fcloud.weservice.controller;
 
 import com.fcloud.core.controller.ActionController;
+import com.fcloud.core.model.Page;
+import com.fcloud.core.model.Pageable;
+import com.fcloud.weservice.model.WePublic;
 import com.fcloud.weservice.model.WeRuleReply;
+import com.fcloud.weservice.model.WeRuleReplyPictext;
 import com.fcloud.weservice.model.WeRuleReplyText;
 import com.fcloud.weservice.repository.WeRuleReplyRepository;
 import com.fcloud.weservice.repository.WeRuleReplyTextRepository;
+import com.j256.ormlite.stmt.QueryBuilder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -17,6 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -75,5 +83,20 @@ public class WeRuleReplyTextController extends
 			weRuleReplyRepository.save(ruleReply);
 		}
 		return render("/public/success");
+	}
+	
+	@Override
+	public ModelAndView index(Pageable page, WebRequest request) {
+		WePublic wePublic = (WePublic) request.getAttribute("wePublic",
+				RequestAttributes.SCOPE_SESSION);
+		QueryBuilder queryBuilder = getRepository().getDao().queryBuilder();
+		Page<WeRuleReplyText> models = null;
+		try {
+			queryBuilder.where().eq("fd_wepublic", wePublic.getId());
+			models = getRepository().readPageByBuilder(queryBuilder, page);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return render("index", models);
 	}
 }

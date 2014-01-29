@@ -2,15 +2,19 @@ package com.fcloud.weservice.controller;
 
 import com.fcloud.core.controller.ActionController;
 import com.fcloud.core.model.Entity;
+import com.fcloud.core.model.Page;
+import com.fcloud.core.model.Pageable;
 import com.fcloud.sys.att.model.SysAtt;
 import com.fcloud.sys.att.repository.SysAttRepository;
 import com.fcloud.util.StringUtil;
+import com.fcloud.weservice.model.WePublic;
 import com.fcloud.weservice.model.WeRuleReply;
 import com.fcloud.weservice.model.WeRuleReplyPictext;
 import com.fcloud.weservice.model.WeRuleReplyText;
 import com.fcloud.weservice.repository.WeRuleReplyPictextRepository;
 import com.fcloud.weservice.repository.WeRuleReplyRepository;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.table.DatabaseTable;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -27,6 +31,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -42,7 +49,7 @@ public class WeRuleReplyPictextController extends
 
 	@Resource
 	private WeRuleReplyRepository weRuleReplyRepository;
-	
+
 	@Resource
 	private SysAttRepository sysAttRepository;
 
@@ -51,28 +58,57 @@ public class WeRuleReplyPictextController extends
 	public ModelAndView create(HttpServletRequest request,
 			HttpServletResponse response) {
 		WeRuleReplyPictext model = null;
-		String fdRuleId = request.getParameter("ruleId");
+		String type = request.getParameter("type");
 		try {
-			if (!StringUtils.isEmpty(fdRuleId)) {
-				WeRuleReply ruleReply = weRuleReplyRepository.findOne(fdRuleId);
-				model = getRepository().findOne(ruleReply.getFdMaterial());
-				if (model != null) {
-					String pathUrl = request.getLocalAddr();
-					if(request.getLocalPort() != 80){
-						pathUrl = StringUtil.linkString(pathUrl, ":", String.valueOf(request.getLocalPort()));
+			if ("1".equals(type)) {
+				String fdRuleId = request.getParameter("ruleId");
+				if (!StringUtils.isEmpty(fdRuleId)) {
+					WeRuleReply ruleReply = weRuleReplyRepository
+							.findOne(fdRuleId);
+					model = getRepository().findOne(ruleReply.getFdMaterial());
+					if (model != null) {
+						String pathUrl = request.getLocalAddr();
+						if (request.getLocalPort() != 80) {
+							pathUrl = StringUtil.linkString(pathUrl, ":",
+									String.valueOf(request.getLocalPort()));
+						}
+						pathUrl = StringUtil.linkString(pathUrl, "/",
+								request.getContextPath());
+						JSONObject infos = setPicJson(model, pathUrl);
+						request.setAttribute("infos", infos);
+					} else {
+						model = createModel();
+						request.setAttribute("infos", new JSONObject());
 					}
-					pathUrl = StringUtil.linkString(pathUrl, "/", request.getContextPath());
-					JSONObject infos = setPicJson(model,pathUrl);
-					request.setAttribute("infos", infos);
+					request.setAttribute("ruleReplyId", ruleReply.getId());
 				} else {
 					model = createModel();
 					request.setAttribute("infos", new JSONObject());
 				}
-				request.setAttribute("ruleReplyId", ruleReply.getId());
 			} else {
-				model = createModel();
-				request.setAttribute("infos", new JSONObject());
+				String fdId = request.getParameter("fdId");
+				if (!StringUtils.isEmpty(fdId)) {
+					model = getRepository().findOne(fdId);
+					if (model != null) {
+						String pathUrl = request.getLocalAddr();
+						if (request.getLocalPort() != 80) {
+							pathUrl = StringUtil.linkString(pathUrl, ":",
+									String.valueOf(request.getLocalPort()));
+						}
+						pathUrl = StringUtil.linkString(pathUrl, "/",
+								request.getContextPath());
+						JSONObject infos = setPicJson(model, pathUrl);
+						request.setAttribute("infos", infos);
+					} else {
+						model = createModel();
+						request.setAttribute("infos", new JSONObject());
+					}
+				} else {
+					model = createModel();
+					request.setAttribute("infos", new JSONObject());
+				}
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -85,24 +121,27 @@ public class WeRuleReplyPictextController extends
 			HttpServletResponse response) {
 		String fdId = request.getParameter("id");
 		String picitems = request.getParameter("picitems");
-		String ruleId = request.getParameter("ruleReplyId");
-		WeRuleReply ruleReply = weRuleReplyRepository.findOne(ruleId);
-		if (ruleReply != null) {
-			try {
-				WeRuleReplyPictext ruleReplyText = getRepository()
-						.findOne(fdId);
-				if (ruleReplyText == null) {
-					ruleReplyText = createModel();
-					ruleReplyText.setId(fdId);
-				}
-				// 设置内容
-				setInfo(picitems, ruleReplyText);
-				getRepository().save(ruleReplyText);
+		WePublic wePublic = (WePublic) request.getSession().getAttribute(
+				"wePublic");
+		try {
+			WeRuleReplyPictext ruleReplyText = getRepository().findOne(fdId);
+			if (ruleReplyText == null) {
+				ruleReplyText = createModel();
+				ruleReplyText.setId(fdId);
+			}
+			ruleReplyText.setFdWepublic(wePublic);
+			// 设置内容
+			setInfo(picitems, ruleReplyText);
+			getRepository().save(ruleReplyText);
+			String ruleId = request.getParameter("ruleReplyId");
+			WeRuleReply ruleReply = weRuleReplyRepository.findOne(ruleId);
+			if (ruleReply != null) {
 				ruleReply.setFdMaterial(ruleReplyText.getId());
 				weRuleReplyRepository.save(ruleReply);
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return render("/public/success");
 	}
@@ -124,22 +163,50 @@ public class WeRuleReplyPictextController extends
 			}
 			if (picitemsJson.containsKey("fileid0")) {
 				ruleReplyText.setAttId(picitemsJson.getString("fileid0"));
-				SysAtt sysAtt = sysAttRepository.findOne(ruleReplyText.getAttId());
-				if(sysAtt != null){
+				SysAtt sysAtt = sysAttRepository.findOne(ruleReplyText
+						.getAttId());
+				if (sysAtt != null) {
 					ruleReplyText.setFdPic(sysAtt.getPicUrl());
-				}else{
+				} else {
 					ruleReplyText.setAttId("");
 				}
 			}
 			if (picitemsJson.containsKey("sourceurl0")) {
-				ruleReplyText
-						.setFdUrl(picitemsJson.getString("sourceurl0"));
+				ruleReplyText.setFdUrl(picitemsJson.getString("sourceurl0"));
 			}
 			// TODO 缺少附件
 		}
 	}
 
-	private JSONObject setPicJson(WeRuleReplyPictext model,String pathUrl) {
+	@RequestMapping("/getPictextList")
+	@Transactional
+	public ModelAndView getPictextList(HttpServletRequest request,
+			HttpServletResponse response) {
+		PrintWriter out = null;
+		try {
+			WePublic wePublic = (WePublic) request.getSession().getAttribute(
+					"wePublic");
+			List<WeRuleReplyPictext> list = getRepository().getDao()
+					.queryBuilder().where().eq("fd_wepublic", wePublic.getId())
+					.query();
+			String opinions = null;
+			for (WeRuleReplyPictext weRuleReplyPictext : list) {
+				String opinion = "<option value=\""
+						+ weRuleReplyPictext.getId() + "\">"
+						+ weRuleReplyPictext.getFdTitle() + "</option>";
+				opinions = StringUtil.linkString(opinions, "<br/>", opinion);
+			}
+			out = response.getWriter();
+			out.print(opinions);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			out.close();
+		}
+		return null;
+	}
+
+	private JSONObject setPicJson(WeRuleReplyPictext model, String pathUrl) {
 		JSONArray multiitem = new JSONArray();
 		JSONObject multiobj = new JSONObject();
 		multiobj.element("seq", 0);
@@ -148,8 +215,13 @@ public class WeRuleReplyPictextController extends
 		multiobj.element("show_cover_pic", 1);
 		multiobj.element("author", model.getFdTags());
 		multiobj.element("content", model.getFdText());
-		multiobj.element("file_id", model.getAttId());
-		multiobj.element("cover", "http://"+pathUrl+"/upload"+model.getFdPic());
+		if (StringUtil.isNotNull(model.getAttId())
+				&& StringUtil.isNotNull(model.getFdPic())) {
+			multiobj.element("file_id", model.getAttId());
+			multiobj.element("cover",
+					"http://" + pathUrl + "/upload" + model.getFdPic());
+		}
+
 		multiobj.element("source_url", model.getFdUrl());
 		multiitem.add(multiobj);
 		multiobj.element("multi_item", multiitem);
@@ -161,4 +233,27 @@ public class WeRuleReplyPictextController extends
 		System.out.println(infos);
 		return infos;
 	}
+
+	@Override
+	public ModelAndView index(Pageable page, WebRequest request) {
+		WePublic wePublic = (WePublic) request.getAttribute("wePublic",
+				RequestAttributes.SCOPE_SESSION);
+		QueryBuilder queryBuilder = getRepository().getDao().queryBuilder();
+		Page<WeRuleReplyPictext> models = null;
+		try {
+			queryBuilder.where().eq("fd_wepublic", wePublic.getId());
+			models = getRepository().readPageByBuilder(queryBuilder, page);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return render("index", models);
+	}
+
+	@Override
+	public ModelAndView delete(String id, WebRequest request) {
+		WeRuleReplyPictext weRuleReplyPictext = getRepository().findOne(id);
+		getRepository().delete(weRuleReplyPictext);
+		return render("/public/success");
+	}
+	
 }

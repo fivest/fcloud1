@@ -143,5 +143,25 @@ public class WeRuleReplyPictext extends Entity {
 	public void setAttId(String attId) {
 		this.attId = attId;
 	}
+	
+	/**
+	 * 相关公众号
+	 */
+    @DatabaseField(columnName = "fd_wepublic",foreign = true)
+	protected WePublic fdWepublic;
+
+	/**
+	 * @return 相关公众号
+	 */
+	public WePublic getFdWepublic() {
+		return fdWepublic;
+	}
+
+	/**
+	 * @param fdWepublic 相关公众号 
+	 */
+	public void setFdWepublic(WePublic fdWepublic) {
+		this.fdWepublic = fdWepublic;
+	}
 
 }
