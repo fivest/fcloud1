@@ -14,39 +14,23 @@
             <span class="ui-title"/>
 
             <div class="ui-btn-right">
-                <a href="<%=request.getContextPath()%>/weservice/we_public/create" target="_blank">新增</a>
+                <a href="<%=request.getContextPath()%>/weservice/we_rule_reply_pictexts/add?type=2" target="_blank">新增</a>
             </div>
         </div>
         <table class="movie-list ui-responsive">
             <thead>
             <tr>
-                <th>公众号名称</th>
-                <th>二维码</th>
-                <th>微信号</th>
-                <th>类型</th>
-                <th>登录邮箱</th>
-                <th>操作</th>
+                <th>标题</th>
             </tr>
             </thead>
             <tbody>
             <c:forEach items="${page.content}" var="m">
                 <tr>
-                    <td><a href="<%=request.getContextPath()%>/weservice/we_public/${m.id}"
-                           target="_blank">${m.fdName}</a>
+                    <td>
+                    	${m.fdTitle}
                     </td>
-                    <td><a href="<%=request.getContextPath()%>/weservice/we_public/${m.id}"
-                           target="_blank">${m.fdCode}</a>
-                    </td>
-                    <td><a href="<%=request.getContextPath()%>/weservice/we_public/${m.id}"
-                           target="_blank">${m.fdPublic}</a></td>
-                    <td><a href="<%=request.getContextPath()%>/weservice/we_public/${m.id}"
-                           target="_blank">${m.fdPtype}</a>
-                    </td>
-                    <td><a href="<%=request.getContextPath()%>/weservice/we_public/${m.id}"
-                           target="_blank">${m.fdEmail}</a>
-                    </td>
-                    <td><a href="<%=request.getContextPath()%>/weservice/we_public/${m.id}/edit" target="_blank">编辑</a>
-                        <a href="<%=request.getContextPath()%>/weservice/we_public/${m.id}?_method=DELETE"
+                    <td><a href="<%=request.getContextPath()%>/weservice/we_rule_reply_pictexts/add?fdId=${m.id}&type=2" target="_blank">编辑</a>
+                        <a href="<%=request.getContextPath()%>/weservice/we_rule_reply_pictexts/${m.id}?_method=DELETE"
                            target="_blank">删除</a>
                     </td>
                 </tr>

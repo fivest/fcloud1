@@ -90,19 +90,25 @@
         </table>
 
         <script>
+        	var areaInfo = ${requestScope.fdArea};
             $(function () {
-                initInfos();
+            	if(JSON.stringify(areaInfo) != "{}"){
+            		initInfos();
+            	}   	
             })
 
             function initInfos() {
-                var areaInfo = ${requestScope.fdArea};
+               
                 $("#default_id1").val(areaInfo.default_id1);
                 $("#default_type1").val(areaInfo.default_type1);
                 if(areaInfo.default_type1 != 1){
                 	$("#div_text1").hide();
                 	$("#div_pic1").show();
+                	setPicInfo("1",areaInfo.default_text1);
+                }else{
+                	$("#default_text1",$("#div_text1")).val(areaInfo.default_text1);	
                 }
-                $("#default_text1").val(areaInfo.default_text1);
+                
                 if (areaInfo.default_use1 == 1) {
                     $("#default_use1").attr("checked", true);
                 }
@@ -112,6 +118,9 @@
                 if(areaInfo.default_type2 != 1){
                 	$("#div_text2").hide();
                 	$("#div_pic2").show();
+                	setPicInfo("2",areaInfo.default_text2);
+                }else{
+                	$("#default_text2",$("#div_text2")).val(areaInfo.default_text2);	
                 }
                 $("#default_text2").val(areaInfo.default_text2);
                 if (areaInfo.default_use2 == 1) {
@@ -120,9 +129,12 @@
 
                 $("#default_id3").val(areaInfo.default_id3);
                 $("#default_type3").val(areaInfo.default_type3);
-                if(areaInfo.default_type1 != 1){
+                if(areaInfo.default_type3 != 1){
                 	$("#div_text3").hide();
                 	$("#div_pic3").show();
+                	setPicInfo("3",areaInfo.default_text3);
+                }else{
+                	$("#default_text3",$("#div_text3")).val(areaInfo.default_text3);	
                 }
                 $("#default_text3").val(areaInfo.default_text3);
                 if (areaInfo.default_use3 == 1) {
@@ -133,7 +145,12 @@
             function setInfos() {
                 var default_id1 = $("#default_id1").val();
                 var default_type1 = $("#default_type1").val();
-                var default_text1 = $("#default_text1").val();
+                var default_text1 = null;
+                if(default_type1 == "1"){
+                	default_text1 = $("#default_text1",$("#div_text1")).val();
+                }else{
+                	default_text1 = $("#default_text1",$("#div_pic1")).val();
+                }
                 var default_use1 = 0;
                 if ($("#default_use1").is(":checked") == true) {
                     default_use1 = 1;
@@ -141,7 +158,13 @@
 
                 var default_id2 = $("#default_id2").val();
                 var default_type2 = $("#default_type2").val();
-                var default_text2 = $("#default_text2").val();
+                var default_text2 = null;
+                if(default_type2 == "1"){
+                	default_text2 = $("#default_text2",$("#div_text2")).val();
+                }else{
+                	default_text2 = $("#default_text2",$("#div_pic2")).val();
+                }
+                
                 var default_use2 = 0;
                 if ($("#default_use2").is(":checked") == true) {
                     default_use2 = 1;
@@ -149,19 +172,24 @@
 
                 var default_id3 = $("#default_id3").val();
                 var default_type3 = $("#default_type3").val();
-                var default_text3 = $("#default_text3").val();
+                var default_text3 = null;
+                if(default_type3 == "1"){
+                	default_text3 = $("#default_text3",$("#div_text3")).val();
+                }else{
+                	default_text3 = $("#default_text3",$("#div_pic3")).val();
+                }
                 var default_use3 = 0;
                 if ($("#default_use3").is(":checked") == true) {
                     default_use3 = 1;
                 }
                 var defInfo = {default_id2: default_id2, default_id1: default_id1, default_id3: default_id3, default_type1: default_type1, default_text1: default_text1, default_use1: default_use1, default_type2: default_type2, default_text2: default_text2, default_use2: default_use2, default_type3: default_type3, default_text3: default_text3, default_use3: default_use3};
+                alert(JSON.stringify(defInfo));
                 $("#fdArea").attr("value", JSON.stringify(defInfo));
                 return false;
             }
             
             function setDiv(obj){
             	var index = obj;
-            	alert(index);
             	var default_type = $("#default_type"+index).val();
             	if(default_type == "1"){
             		$("#div_text"+index).show();
@@ -170,12 +198,31 @@
             	}else{
             		$("#div_text"+index).hide();
                 	$("#div_pic"+index).show();
+                	setPicInfo(index,null);
                 	$("#default_text"+index,$("#div_text"+index)).val("");
             	}
             }
             
-            function setPicInfo(obj){
-            	
+            function setPicInfo(obj,picid){
+            	var type = $("#default_type"+obj).val();
+            	if(type == "2"){
+            		url = "/weservice/we_rule_reply_pictext/getPictextList";
+            	}else{
+            		url = "/weservice/we_rule_reply_pictexts/getPictextsList";
+            	}
+            	$.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: "text",
+                    success: function (data) {
+                        $("#default_text"+obj,$("#div_pic"+obj)).empty().append(data);
+                        if(picid != null && picid.length>0){
+                        	$("#default_text"+obj,$("#div_pic"+obj)).val(picid);
+                        }
+                    },
+                    error: function (data) {
+
+                    }});
             }
         </script>
     </form:form>
