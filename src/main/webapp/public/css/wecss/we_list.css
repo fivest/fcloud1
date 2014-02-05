@@ -1,0 +1,19 @@
+.body {
+	font-size: 10px;
+}
+
+.label,input {
+	display: block;
+}
+
+div#list-contain table {
+	margin: 1em 0;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+div#list-contain table td,div#list-contain table th {
+	border: 1px solid #eee;
+	padding: .6em 4px;
+	text-align: left;
+}
