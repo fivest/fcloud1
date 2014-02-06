@@ -43,10 +43,10 @@ public class SysAttController extends
 		ActionController<SysAtt, SysAttRepository> {
 	@Value("#{fcloud['fcloudhost']}")
 	private String fcloudhost;
-	
+
 	@Resource
 	private WeRuleReplyPictextRepository weRuleReplyPictextRepository;
-	
+
 	@Resource
 	private WeRuleReplyPictextsonRepository weRuleReplyPictextsonRepository;
 
@@ -168,18 +168,22 @@ public class SysAttController extends
 			String fileId = request.getParameter("fileId");
 			String type = request.getParameter("type");
 			SysAtt att = getRepository().findOne(fileId);
-			if(att != null){
-				if("0".equals(type)){
-					List<WeRuleReplyPictext> pictexts = weRuleReplyPictextRepository.getDao().queryBuilder().where().eq("att_id", att.getId()).query();
-					if(!pictexts.isEmpty()){
+			if (att != null) {
+				if ("0".equals(type)) {
+					List<WeRuleReplyPictext> pictexts = weRuleReplyPictextRepository
+							.getDao().queryBuilder().where()
+							.eq("att_id", att.getId()).query();
+					if (!pictexts.isEmpty()) {
 						WeRuleReplyPictext pictext = pictexts.get(0);
 						pictext.setAttId("");
 						pictext.setFdPic("");
 						weRuleReplyPictextRepository.save(pictext);
 					}
-				}else{
-					List<WeRuleReplyPictextson> pictexts = weRuleReplyPictextsonRepository.getDao().queryBuilder().where().eq("att_id", att.getId()).query();
-					if(!pictexts.isEmpty()){
+				} else {
+					List<WeRuleReplyPictextson> pictexts = weRuleReplyPictextsonRepository
+							.getDao().queryBuilder().where()
+							.eq("att_id", att.getId()).query();
+					if (!pictexts.isEmpty()) {
 						WeRuleReplyPictextson pictextson = pictexts.get(0);
 						pictextson.setAttId("");
 						pictextson.setFdPic("");
@@ -187,12 +191,12 @@ public class SysAttController extends
 					}
 				}
 				getRepository().deleteByAttId(att.getId());
-				out.print("code:1");	
+				out.print("code:1");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if(out != null){
+			if (out != null) {
 				out.flush();
 				out.close();
 			}
@@ -212,24 +216,27 @@ public class SysAttController extends
 		try {
 			if (StringUtil.isNotNull(attId)) {
 				SysAtt sysAtt = getRepository().findOne(attId);
-				if(sysAtt != null){
+				if (sysAtt != null) {
 					File file = new File(sysAtt.getFileUrl());
-					InputStream in = new FileInputStream(file);
-					out = new BufferedOutputStream(response.getOutputStream());
-					byte b[] = new byte[1024];
-					int len = in.read(b);
-					while (len > 0) {
-						out.write(b, 0, len);
-						len = in.read(b);
+					if (file.exists()) {
+						InputStream in = new FileInputStream(file);
+						out = new BufferedOutputStream(
+								response.getOutputStream());
+						byte b[] = new byte[1024];
+						int len = in.read(b);
+						while (len > 0) {
+							out.write(b, 0, len);
+							len = in.read(b);
+						}
 					}
-				}	
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if(out != null){
-					out.close();	
+				if (out != null) {
+					out.close();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
