@@ -22,6 +22,8 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.table.DatabaseTable;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -48,7 +50,8 @@ import java.util.List;
 @RequestMapping("/weservice/we_rule_reply_pictexts")
 public class WeRuleReplyPictextsController extends
 		ActionController<WeRuleReplyPictexts, WeRuleReplyPictextsRepository> {
-
+	@Value("#{fcloud['fcloudhost']}")
+    private String fcloudhost;
 	@Resource
 	private WeRuleReplyRepository weRuleReplyRepository;
 
@@ -66,6 +69,12 @@ public class WeRuleReplyPictextsController extends
 		String type = request.getParameter("type");
 		JSONObject infos = new JSONObject();
 		try {
+			String pathUrl = fcloudhost;
+    		if(request.getLocalPort() != 80){
+    			pathUrl = StringUtil.linkString(pathUrl, ":", String.valueOf(request.getLocalPort()));
+    		}
+    		pathUrl = StringUtil.linkString(pathUrl, "/", request.getContextPath());
+    		pathUrl = pathUrl+"/upload";
 			if("1".equals(type)){
 				String fdRuleId = request.getParameter("ruleId");
 				if (!StringUtils.isEmpty(fdRuleId)) {
@@ -76,13 +85,7 @@ public class WeRuleReplyPictextsController extends
 						ForeignCollection<WeRuleReplyPictextson> pictextsons = model
 								.getWeRuleReplyPictextsons();
 						if (pictextsons != null && !pictextsons.isEmpty()) {
-							String pathUrl = request.getLocalAddr();
-							if (request.getLocalPort() != 80) {
-								pathUrl = StringUtil.linkString(pathUrl, ":",
-										String.valueOf(request.getLocalPort()));
-							}
-							pathUrl = StringUtil.linkString(pathUrl, "/",
-									request.getContextPath());
+							
 							infos = setPicJson(pictextsons, pathUrl);
 						}
 					} else {
@@ -104,13 +107,7 @@ public class WeRuleReplyPictextsController extends
 						ForeignCollection<WeRuleReplyPictextson> pictextsons = model
 								.getWeRuleReplyPictextsons();
 						if (pictextsons != null && !pictextsons.isEmpty()) {
-							String pathUrl = request.getLocalAddr();
-							if (request.getLocalPort() != 80) {
-								pathUrl = StringUtil.linkString(pathUrl, ":",
-										String.valueOf(request.getLocalPort()));
-							}
-							pathUrl = StringUtil.linkString(pathUrl, "/",
-									request.getContextPath());
+							
 							infos = setPicJson(pictextsons, pathUrl);
 						}
 					} else {
@@ -276,8 +273,7 @@ public class WeRuleReplyPictextsController extends
 			multiobj.element("author", pictextson.getFdTags());
 			if (!StringUtils.isEmpty(pictextson.getAttId())) {
 				multiobj.element("file_id", pictextson.getAttId());
-				multiobj.element("cover", "http://" + path + "/upload"
-						+ pictextson.getFdPic());
+				multiobj.element("cover", path + pictextson.getFdPic());
 			}
 			multiobj.element("source_url", pictextson.getFdUrl());
 			multiitem.add(multiobj);

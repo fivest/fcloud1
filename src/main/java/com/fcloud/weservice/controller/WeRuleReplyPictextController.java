@@ -18,6 +18,8 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.table.DatabaseTable;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -46,7 +48,8 @@ import java.util.List;
 @RequestMapping("/weservice/we_rule_reply_pictext")
 public class WeRuleReplyPictextController extends
 		ActionController<WeRuleReplyPictext, WeRuleReplyPictextRepository> {
-
+	@Value("#{fcloud['fcloudhost']}")
+    private String fcloudhost;
 	@Resource
 	private WeRuleReplyRepository weRuleReplyRepository;
 
@@ -60,6 +63,12 @@ public class WeRuleReplyPictextController extends
 		WeRuleReplyPictext model = null;
 		String type = request.getParameter("type");
 		try {
+			String pathUrl = fcloudhost;
+    		if(request.getLocalPort() != 80){
+    			pathUrl = StringUtil.linkString(pathUrl, ":", String.valueOf(request.getLocalPort()));
+    		}
+    		pathUrl = StringUtil.linkString(pathUrl, "/", request.getContextPath());
+    		pathUrl = pathUrl+"/upload";
 			if ("1".equals(type)) {
 				String fdRuleId = request.getParameter("ruleId");
 				if (!StringUtils.isEmpty(fdRuleId)) {
@@ -67,13 +76,6 @@ public class WeRuleReplyPictextController extends
 							.findOne(fdRuleId);
 					model = getRepository().findOne(ruleReply.getFdMaterial());
 					if (model != null) {
-						String pathUrl = request.getLocalAddr();
-						if (request.getLocalPort() != 80) {
-							pathUrl = StringUtil.linkString(pathUrl, ":",
-									String.valueOf(request.getLocalPort()));
-						}
-						pathUrl = StringUtil.linkString(pathUrl, "/",
-								request.getContextPath());
 						JSONObject infos = setPicJson(model, pathUrl);
 						request.setAttribute("infos", infos);
 					} else {
@@ -90,13 +92,6 @@ public class WeRuleReplyPictextController extends
 				if (!StringUtils.isEmpty(fdId)) {
 					model = getRepository().findOne(fdId);
 					if (model != null) {
-						String pathUrl = request.getLocalAddr();
-						if (request.getLocalPort() != 80) {
-							pathUrl = StringUtil.linkString(pathUrl, ":",
-									String.valueOf(request.getLocalPort()));
-						}
-						pathUrl = StringUtil.linkString(pathUrl, "/",
-								request.getContextPath());
 						JSONObject infos = setPicJson(model, pathUrl);
 						request.setAttribute("infos", infos);
 					} else {
@@ -121,6 +116,7 @@ public class WeRuleReplyPictextController extends
 			HttpServletResponse response) {
 		String fdId = request.getParameter("id");
 		String picitems = request.getParameter("picitems");
+		System.out.println(picitems);
 		WePublic wePublic = (WePublic) request.getSession().getAttribute(
 				"wePublic");
 		try {
@@ -219,7 +215,7 @@ public class WeRuleReplyPictextController extends
 				&& StringUtil.isNotNull(model.getFdPic())) {
 			multiobj.element("file_id", model.getAttId());
 			multiobj.element("cover",
-					"http://" + pathUrl + "/upload" + model.getFdPic());
+					pathUrl + model.getFdPic());
 		}
 
 		multiobj.element("source_url", model.getFdUrl());

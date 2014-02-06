@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +35,9 @@ import com.thoughtworks.xstream.core.ReferenceByIdMarshaller.IDGenerator;
 @RequestMapping("/sys/att")
 public class SysAttController extends
 		ActionController<SysAtt, SysAttRepository> {
+	@Value("#{fcloud['fcloudhost']}")
+    private String fcloudhost;
+	
 	@RequestMapping("/fileUpload")
     public ModelAndView fileUpload(HttpServletRequest request,HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
@@ -52,7 +56,7 @@ public class SysAttController extends
     			if (iter.hasNext()) {
     				myfile = multiRequest.getFile((String) iter.next());
     				if(myfile.isEmpty()){  
-                        out.print("1`閻犲洨鍏橀敓浠嬪箯閳哄倹鐎ù鐘烘硾閹绋夋繝浣虹倞");  
+                        out.print("附件不能为空");  
                         out.flush();  
                         return null;  
                     }else{  
@@ -102,12 +106,13 @@ public class SysAttController extends
                     		getRepository().save(sysAtt);
                     		JSONObject result = new JSONObject();
                     		result.put("attId",sysAtt.getId());
-                    		String pathUrl = request.getLocalAddr();
+                    		String pathUrl = fcloudhost;
                     		if(request.getLocalPort() != 80){
                     			pathUrl = StringUtil.linkString(pathUrl, ":", String.valueOf(request.getLocalPort()));
                     		}
                     		pathUrl = StringUtil.linkString(pathUrl, "/", request.getContextPath());
-                    		result.put("picUrl","http://"+pathUrl+"/upload"+picFilePath);
+                    		pathUrl = pathUrl+"/upload";
+                    		result.put("picUrl",pathUrl+picFilePath);
                     		//返回相关请求的信息
                     		out.print(result.toString());
                         } catch (Exception e) {  
