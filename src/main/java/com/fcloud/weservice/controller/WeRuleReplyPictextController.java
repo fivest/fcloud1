@@ -68,7 +68,7 @@ public class WeRuleReplyPictextController extends
     			pathUrl = StringUtil.linkString(pathUrl, ":", String.valueOf(request.getLocalPort()));
     		}
     		pathUrl = StringUtil.linkString(pathUrl, "/", request.getContextPath());
-    		pathUrl = pathUrl+"/upload";
+    		pathUrl = pathUrl+"/sys/att/showPic?";
 			if ("1".equals(type)) {
 				String fdRuleId = request.getParameter("ruleId");
 				if (!StringUtils.isEmpty(fdRuleId)) {
@@ -215,7 +215,7 @@ public class WeRuleReplyPictextController extends
 				&& StringUtil.isNotNull(model.getFdPic())) {
 			multiobj.element("file_id", model.getAttId());
 			multiobj.element("cover",
-					pathUrl + model.getFdPic());
+					pathUrl +"file_id="+ model.getAttId());
 		}
 
 		multiobj.element("source_url", model.getFdUrl());
