@@ -779,10 +779,10 @@ S=e("public/js/pic/small_appmsg.html.js");
                 }), $(".js_removeCover", t).click(function () {
                 	var file_id = $(".js_cover", t).data("file_id");
                 	$.ajax({
-                        type: "POST",
+                        type: "GET",
                         url: "/sys/att/deleteById",
-                        data: {fileId:file_id},
-                        dataType: "json",
+                        data: {fileId:file_id,type:wx.cgiData.isMul},
+                        dataType: "text",
                         success: function (data) {
                             $(".js_cover", t).data("file_id", !1).hide().find("img").remove(), e.nowitem$ && e.nowitem$.removeClass("has_thumb");
                         },
@@ -845,7 +845,7 @@ S=e("public/js/pic/small_appmsg.html.js");
                 var t = this, n = t.editor$;
                 n.find(".js_cover_tip").html(e.isFirst ? "大图片建议尺寸：360像素 * 200像素" : "小图片建议尺寸：200像素 * 200像素"), $(".js_title", n).val(e.title), $(".js_author", n).val(e.author), $(".js_cover", n).find("img").remove();
                 if (!e.file_id) $(".js_cover", n).data("file_id", !1).hide(); else {
-                    var r = e.cover;
+                	var r = "http://"+window.location.host+"/sys/att/showPic?file_id=%s".sprintf(e.file_id);
                     $(".js_cover", n).show().prepend('<img src="%s">'.sprintf(r)).data("file_id", e.file_id);
                 }
                 $(".js_desc", n).val(e.digest), !t.isMul && s == 10 && (e.digest ? ($(".js_addDesc", n).hide(), $(".js_desc_area", n).show()) : ($(".js_addDesc", n).show(), $(".js_desc_area", n).hide())), s == 10 ? $(".js_url", n).val(e.source_url || "") : $(".js_url", n).val(e.content_url || ""), !e.source_url && s == 10 ? ($(".js_addURL", n).show(), $(".js_url_area", n).hide()) : ($(".js_addURL", n).hide(), $(".js_url_area", n).show()), s == 10 && t._setEditorContent(e.content);
