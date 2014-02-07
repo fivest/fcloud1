@@ -750,17 +750,17 @@ S=e("public/js/pic/small_appmsg.html.js");
                 }) : $("#js_add_appmsg").addClass("dn"), s == 10 && (setInterval(function () {
                     t.auto_save();
                 }, 12e4), window.onbeforeunload = function () {
-                    var e = !0, n = t._getEditData();
-                    for (var r in n) if (!!n[r]) {
-                        e = !1;
-                        break;
-                    }
-                    if (!e && !t.draft.isDropped) {
-                        t.auto_save();
-                        var i = h.get(t.draft.timeKey);
-                        return "已自动保存" + i + "时的内容。";
-                    }
-                    t.draft.clear();
+//                    var e = !0, n = t._getEditData();
+//                    for (var r in n) if (!!n[r]) {
+//                        e = !1;
+//                        break;
+//                    }
+//                    if (!e && !t.draft.isDropped) {
+//                        t.auto_save();
+//                        var i = h.get(t.draft.timeKey);
+//                        return "已自动保存" + i + "时的内容。";
+//                    }
+//                    t.draft.clear();
                 });
             },
             _initEditor: function () {
@@ -975,8 +975,8 @@ S=e("public/js/pic/small_appmsg.html.js");
                 var i = /:\/\//, o = s == 10 ? e.source_url : e.content_url;
                 !!o && !i.test(o) && (o = "http://" + o), s == 11 ? r["contenturl" + t] = o : r["sourceurl" + t] = o;
                 if (!y.rangelength(e.title, [ 1, 64 ])) return p.err("标题不能为空且长度不能超过%s字".sprintf(64)), $(".js_title", this.editor$).focus(), null;
-                if (!y.maxlength(e.author, 8)) return p.err("作者不能超过%s个字".sprintf(8)), $(".js_author", this.editor$).focus(), null;
-                if (!e.file_id) if (s == 11) return p.err("必须插入一张图片"), null;
+                if (!y.maxlength(e.author, 50)) return p.err("标签不能超过%s个字".sprintf(50)), $(".js_author", this.editor$).focus(), null;
+                if (!e.file_id) return p.err("必须插入一张图片"), null;
                 return s == 10 && !y.rangelength(e.content.text(), [ 1, 2e4 ]) ? (p.err("正文不能为空且长度不能超过%s字".sprintf(2e4)), null) : !n.isMul && !y.rangelength(e.digest, [ 1, 120 ]) ? (p.err("%s不能为空且长度不能超过%s字".sprintf(s == 10 ? "摘要" : "描述", 120)), $(".js_desc", this.editor$).focus(), null) : s != 11 && !o || !!y.url(o) ? s == 10 && !e.content.split("<iframe ").length > 2 ? (p.err("正文只能包含%s个视频".sprintf(1)), null) : r : (p.err("链接不合法"), $(".js_url", this.editor$).focus(), null);
             },
             getData: function () {
@@ -1003,7 +1003,7 @@ S=e("public/js/pic/small_appmsg.html.js");
                 return Draft.clear(), Draft.isDropped = !0, window.location.reload(), !1;
             }), $("#js_submit").click(function () {
                 var e = r.getData();
-                if (!e) return;
+                if (!e) return false;
                 //处理数据
                 var data = JSON.stringify(e).toString();
                 $("#picitems").val(data);
